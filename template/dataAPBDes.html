@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load humanize %} {# Tambahkan ini jika menggunakan |intcomma #}
+
+{% block title %}Data APBDesa Desa Boyemare{% endblock %}
+
+{% block content %}
+<style>
+    .apbdes-container {
+        padding: 30px;
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    .apbdes-container h2 {
+        color: #2ECC71;
+        font-size: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+    .apbdes-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        padding: 25px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .apbdes-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+    .apbdes-card h3 {
+        color: #34495E;
+        font-size: 2em;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 700;
+    }
+    .apbdes-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .apbdes-item {
+        background-color: #ecf0f1;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 1.1em;
+        color: #34495E;
+    }
+    .apbdes-item strong {
+        display: block;
+        color: #27AE60;
+        font-size: 1.2em;
+        margin-bottom: 5px;
+    }
+    .apbdes-links {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .apbdes-links a {
+        background-color: #3498DB;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+    .apbdes-links a:hover {
+        background-color: #2980B9;
+    }
+    .no-apbdes {
+        text-align: center;
+        color: #7f8c8d;
+        font-style: italic;
+        margin-top: 30px;
+        font-size: 1.1em;
+    }
+</style>
+
+<div class="apbdes-container">
+    <h2>Data Anggaran Pendapatan dan Belanja Desa (APBDesa)</h2>
+    {% if apbdesa_list %}
+        {% for apbdes in apbdesa_list %}
+            <div class="apbdes-card">
+                <h3>Tahun Anggaran {{ apbdes.tahun }}</h3>
+                <div class="apbdes-details">
+                    <div class="apbdes-item">
+                        <strong>Total Pendapatan</strong>
+                        Rp {{ apbdes.total_pendapatan|floatformat:0|intcomma }}
+                    </div>
+                    <div class="apbdes-item">
+                        <strong>Total Belanja</strong>
+                        Rp {{ apbdes.total_belanja|floatformat:0|intcomma }}
+                    </div>
+                    {% if apbdes.sisa_lebih_pembiayaan_anggaran %}
+                    <div class="apbdes-item">
+                        <strong>SILPA (Sisa Lebih Pembiayaan Anggaran)</strong>
+                        Rp {{ apbdes.sisa_lebih_pembiayaan_anggaran|floatformat:0|intcomma }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% if apbdes.link_dokumen_resmi %}
+                    <div class="apbdes-links">
+                        <a href="{{ apbdes.link_dokumen_resmi }}" target="_blank" rel="noopener noreferrer">Lihat Dokumen Resmi</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-apbdes">Belum ada data APBDesa yang tersedia.</p>
+    {% endif %}
+</div>
+{% endblock %}

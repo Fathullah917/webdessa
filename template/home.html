@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Beranda Desa Boyemare{% endblock %}
+
+{% block content %}
+<style>
+    .articles-list {
+        padding: 20px;
+        max-width: 900px;
+        margin: 30px auto;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    .articles-list h2 {
+        color: #2ECC71;
+        font-size: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+    .article-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        padding: 25px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+    .article-card h3 {
+        color: #34495E;
+        font-size: 1.8em;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .article-card p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+    .article-card .meta-info {
+        font-size: 0.9em;
+        color: #7f8c8d;
+        margin-top: 15px;
+        text-align: right;
+    }
+    .article-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: block;
+    }
+    .no-articles {
+        text-align: center;
+        color: #7f8c8d;
+        font-style: italic;
+        margin-top: 30px;
+        font-size: 1.1em;
+    }
+</style>
+
+<div class="articles-list">
+    <h2>Berita & Informasi Terbaru Desa Boyemare</h2>
+    {% if articles %}
+        {% for article in articles %}
+            <div class="article-card">
+                <h3>{{ article.title }}</h3>
+                {% if article.gambar_utama %}
+                    <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}">
+                {% endif %}
+                <p>{{ article.content|truncatechars:300 }}</p>
+                <div class="meta-info">
+                    Dipublikasikan pada: {{ article.created_at|date:"d M Y, H:i" }}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-articles">Belum ada artikel atau berita terbaru yang tersedia.</p>
+    {% endif %}
+</div>
+{% endblock %}

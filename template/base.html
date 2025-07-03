@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Desa Boyemare Website{% endblock %}</title>
+    
+    {# Memuat file CSS kustom Anda #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {# Memuat Google Fonts (Montserrat) #}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Desa Boyemare</h1>
+        
+        {# Hamburger menu, tampilkan hanya di mobile menggunakan CSS #}
+        <div class="hamburger-menu" id="hamburger-icon">
+            &#9776; {# Karakter unicode untuk ikon hamburger #}
+        </div>
+        
+        <nav id="main-nav">
+            <a href="{% url 'home_view' %}">Beranda</a>
+            <a href="{% url 'pengaduan_view' %}">Pengaduan</a>
+            <a href="{% url 'umkm_view' %}">UMKM</a>
+            <a href="{% url 'dataAPBDes_view' %}">Data APBDes</a>
+            <a href="{% url 'about_view' %}">Tentang</a>
+            <a href="#">Contact</a> {# Jika ada halaman contact, ganti '#' dengan URL yang sesuai #}
+        </nav>
+    </header>
+
+    <main class="articles-container">
+        {# Konten spesifik dari setiap halaman akan dimasukkan di sini #}
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 MyDesa Website</p>
+    </footer>
+
+    {# Memuat file JavaScript kustom Anda #}
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

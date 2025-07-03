@@ -1,0 +1,381 @@
+/* --- General Styles --- */
+body {
+    font-family: 'Montserrat', sans-serif; /* Modern font */
+    margin: 0;
+    padding: 0;
+    color: #34495E; /* Dark muted blue for text */
+    
+    /* PENTING: Perbaikan path gambar latar belakang */
+    /* Asumsi: ss.png ada di 'TUGAS UAS/static/images/ss.png' */
+    /* Path relatif dari 'static/css/style.css' ke 'static/images/ss.png' adalah '../images/ss.png' */
+    background-image: url('../images/ss.png'); /* */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Membuat background tetap saat scroll */
+}
+
+/* Overlay untuk menggelapkan background demi keterbacaan teks */
+body::before {
+    content: "";
+    position: fixed; /* Penting agar overlay menutupi seluruh viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Perbaikan: Ubah transparansi atau warna overlay agar background lebih terlihat */
+    background-color: rgba(0, 0, 0, 0.4); /* Sedikit lebih gelap dari 0.3 agar teks lebih kontras, namun background masih terlihat. Anda bisa coba 0.25 atau 0.35 */
+    z-index: -1; /* Pastikan overlay di bawah konten utama body */
+}
+
+/* --- Link Defaults --- */
+a {
+    text-decoration: none;
+    color: inherit; /* Mengambil warna teks dari parent */
+}
+
+/* --- Header & Navigation --- */
+header {
+    /* Perbaikan: Gelapkan sedikit warna header */
+    background-color: rgba(39, 174, 96, 0.9); /* Hijau yang sedikit lebih gelap, semi-transparan */
+    padding: 25px 50px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Memungkinkan item wrap ke baris baru jika layar sempit */
+    backdrop-filter: blur(5px); /* Efek blur untuk tampilan modern */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Bayangan lembut untuk efek terangkat */
+    position: relative; /* Penting untuk posisi menu mobile (nav) */
+    z-index: 1000; /* Pastikan header di atas konten lain */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px; /* Ukuran judul lebih besar */
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Default desktop nav styles */
+nav {
+    margin-top: 0; /* Pastikan sejajar dengan h1 di desktop */
+    display: flex; /* Menggunakan flexbox untuk link navigasi */
+}
+
+nav a {
+    margin: 0 15px;
+    color: white;
+    font-weight: 600;
+    font-size: 17px;
+    transition: all 0.3s ease-in-out; /* Transisi yang lebih halus */
+    position: relative; /* Untuk efek garis bawah saat hover */
+    padding: 5px 0; /* Tambahkan padding agar lebih mudah diklik */
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px; /* Posisi garis bawah */
+    left: 0;
+    background-color: #FFDE00; /* Warna aksen kuning */
+    transition: width 0.3s ease-out;
+}
+
+nav a:hover::after {
+    width: 100%; /* Memperluas garis bawah saat hover */
+}
+
+nav a:hover {
+    color: #FFDE00; /* Warna kuning saat hover */
+}
+
+/* Hamburger Menu Icon Styling */
+.hamburger-menu {
+    display: none; /* Default: Sembunyikan di desktop */
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+    background: none;
+    border: none;
+    padding: 0;
+    line-height: 1; /* Pastikan ikon tidak memiliki spasi ekstra */
+    z-index: 1001; /* Pastikan ikon bisa diklik dan di atas header */
+}
+
+/* --- Main Content Area --- */
+main {
+    padding: 50px 30px;
+    max-width: 1100px; /* Lebar maksimum untuk fokus konten */
+    margin: 40px auto; /* Margin vertikal lebih banyak, horizontal auto untuk centering */
+    /* Perbaikan: Membuat background main lebih transparan */
+    background-color: rgba(255, 255, 255, 0.8); /* Opasitas 80% (lebih transparan) - Sesuaikan antara 0.7 hingga 0.9 tergantung selera */
+    border-radius: 16px; /* Sudut lebih membulat */
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Bayangan lebih kuat dan lembut */
+}
+
+/* --- Article Section (Home Page) --- */
+.articles-container {
+    text-align: center; /* Mengatur teks di tengah */
+}
+
+.articles-container h2 {
+    font-size: 30px; /* Ukuran judul lebih besar */
+    margin-bottom: 40px;
+    color: #2ECC71; /* Aksen hijau untuk judul */
+    font-weight: 700;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Kolom adaptif */
+    gap: 30px; /* Jarak antar kartu */
+}
+
+/* --- Article Card --- */
+.article-card {
+    /* Perbaikan: Latar belakang kartu artikel juga lebih transparan */
+    background-color: rgba(255, 255, 255, 0.9); /* Opasitas 90% */
+    padding: 25px;
+    border-radius: 14px; /* Sudut lebih membulat */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Bayangan lebih ringan */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi halus untuk hover */
+    text-align: left;
+    border: 1px solid #ECF0F1; /* Border tipis */
+}
+
+.article-card:hover {
+    transform: translateY(-8px); /* Sedikit terangkat saat hover */
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12); /* Bayangan lebih menonjol saat hover */
+}
+
+.article-card h3 {
+    margin-top: 0;
+    color: #2ECC71; /* Aksen hijau untuk judul kartu */
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.article-card p {
+    font-size: 16px;
+    line-height: 1.6; /* Keterbacaan lebih baik */
+    color: #555;
+}
+
+/* --- Forms (Pengaduan, UMKM, dll) --- */
+form {
+    max-width: 650px;
+    margin: 0 auto; /* Tengah secara horizontal */
+    padding: 30px;
+    /* Perbaikan: Latar belakang form juga lebih transparan */
+    background-color: rgba(248, 249, 249, 0.9); /* Opasitas 90% (dari #F8F9F9) */
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Bayangan dalam untuk kedalaman */
+}
+
+form label {
+    display: block;
+    font-weight: 600;
+    margin-top: 20px;
+    color: #34495E;
+    font-size: 16px;
+}
+
+form input[type="text"],
+form input[type="email"], 
+form input[type="number"], 
+form textarea {
+    width: calc(100% - 24px); /* Mengakomodasi padding + border */
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #BDC3C7; /* Warna border lebih lembut */
+    border-radius: 8px; /* Lebih membulat */
+    font-size: 16px;
+    resize: vertical; /* Memungkinkan textarea diresize vertikal */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="number"]:focus,
+form textarea:focus {
+    border-color: #2ECC71; /* Highlight fokus hijau */
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.2);
+    outline: none; /* Hilangkan outline default browser */
+}
+
+/* --- Buttons --- */
+button,
+input[type="submit"] { /* Tambahkan input type submit agar styling konsisten */
+    background-color: #2ECC71; /* Hijau cerah */
+    color: white;
+    border: none;
+    padding: 14px 25px; /* Padding lebih besar */
+    font-size: 18px; /* Teks lebih besar */
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background-color: #27AE60; /* Hijau lebih gelap saat hover */
+    transform: translateY(-2px); /* Sedikit terangkat saat hover */
+}
+
+/* --- Footer --- */
+footer {
+    /* Perbaikan: Gelapkan sedikit warna footer */
+    background-color: rgba(39, 174, 96, 0.9); /* Sama dengan header, semi-transparan */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 80px; /* Margin atas lebih banyak */
+    font-size: 15px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+}
+
+/* --- Responsive Layout (Mobile Navigation & General Adjustments) --- */
+@media (max-width: 768px) { /* Batas ukuran layar untuk mengaktifkan hamburger */
+    header {
+        flex-direction: row; /* Tetap satu baris */
+        justify-content: space-between; /* Judul dan hamburger di kedua sisi */
+        align-items: center;
+        padding: 20px 25px;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    /* Tampilkan ikon hamburger di mobile */
+    .hamburger-menu {
+        display: block; /* Tampilkan ikon hamburger */
+    }
+
+    /* Sembunyikan navigasi default di mobile */
+    nav {
+        position: absolute; /* Posisikan menu di atas konten */
+        top: 100%; /* Mulai di bawah header */
+        left: 0;
+        width: 100%;
+        height: 0; /* Sembunyikan secara default */
+        /* Perbaikan: Gelapkan sedikit warna background menu mobile */
+        background-color: rgba(39, 174, 96, 0.98); /* Warna background menu mobile yang lebih gelap */
+        flex-direction: column; /* Link tersusun vertikal */
+        overflow: hidden; /* Sembunyikan konten yang meluap */
+        transition: height 0.3s ease-in-out, padding 0.3s ease-in-out; /* Transisi untuk buka/tutup */
+        padding: 0 20px; /* Padding saat tertutup */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        z-index: 999; /* Pastikan menu di atas konten utama */
+    }
+
+    /* Tampilkan navigasi saat class 'active' ditambahkan oleh JavaScript */
+    nav.active {
+        height: auto; /* Biarkan konten menentukan tinggi */
+        max-height: 300px; /* Batasi tinggi maksimum jika ada banyak link (opsional, sesuaikan) */
+        padding: 20px 25px; /* Padding saat terbuka */
+    }
+
+    nav a {
+        display: block; /* Setiap link menjadi baris terpisah */
+        margin: 10px 0; /* Spasi vertikal antar link */
+        font-size: 18px;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Garis pemisah antar link */
+    }
+
+    nav a:last-child {
+        border-bottom: none; /* Tidak ada garis di link terakhir */
+    }
+
+    /* --- Responsive tweaks for smaller screens (main content) --- */
+    main {
+        padding: 30px 20px;
+        margin: 20px auto;
+    }
+
+    .articles-container h2 {
+        font-size: 26px;
+        margin-bottom: 30px;
+    }
+
+    .article-card p {
+        font-size: 15px;
+    }
+
+    form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) { /* Ukuran layar yang lebih kecil lagi */
+    header {
+        padding: 15px 20px;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+
+    nav a {
+        margin: 8px 0;
+        font-size: 16px;
+    }
+
+    main {
+        padding: 20px 15px;
+        margin: 15px auto;
+    }
+
+    .articles-container h2 {
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+
+    .article-card h3 {
+        font-size: 18px;
+    }
+
+    .article-card p {
+        font-size: 14px;
+    }
+
+    button,
+    input[type="submit"] {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
+
+/*
+Tambahan: Jika Anda telah memindahkan styling untuk .umkm-card dan .umkm-list-container
+dari umkm.html ke style.css, pastikan untuk juga menyesuaikan transparansi di sana.
+*/
+.umkm-list-container {
+    padding: 30px;
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: rgba(249, 249, 249, 0.9); /* Transparan dari #f9f9f9 */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+}
+.umkm-card {
+    background-color: rgba(255, 255, 255, 0.9); /* Transparan dari #ffffff */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}

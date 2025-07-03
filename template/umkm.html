@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %} {# Pastikan Anda memuat tag 'static' untuk menggunakan {% static %} #}
+
+{% block title %}Daftar UMKM Desa Boyemare{% endblock %}
+
+{% block content %}
+{# 
+    SANGAT DISARANKAN: 
+    Pindahkan semua CSS di bawah ini ke file eksternal Anda: 
+    'TUGAS UAS/static/css/style.css' 
+    untuk praktik terbaik dan pengelolaan yang lebih mudah.
+#}
+<style>
+    .umkm-list-container {
+        padding: 30px;
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    .umkm-list-container h2 {
+        color: #2ECC71;
+        font-size: 30px;
+        margin-bottom: 30px;
+        text-align: center;
+        font-weight: 700;
+    }
+    .umkm-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .umkm-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    }
+    .umkm-card .logo {
+        flex-shrink: 0; /* Mencegah logo menyusut */
+        width: 100px;
+        height: 100px;
+        border-radius: 50%; /* Membuat lingkaran */
+        overflow: hidden; /* Memastikan gambar tidak meluap dari lingkaran */
+        border: 2px solid #eee;
+    }
+    .umkm-card .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi */
+    }
+    .umkm-card .info {
+        flex-grow: 1; /* Memungkinkan info mengambil sisa ruang */
+    }
+    .umkm-card h3 {
+        color: #34495E;
+        font-size: 1.6em;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .umkm-card p {
+        color: #555;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+    .umkm-card .details {
+        font-size: 0.95em;
+        color: #7f8c8d;
+    }
+    .no-umkm {
+        text-align: center;
+        color: #7f8c8d;
+        font-style: italic;
+        margin-top: 30px;
+        font-size: 1.1em;
+    }
+    @media (max-width: 768px) {
+        .umkm-card {
+            flex-direction: column; /* Ubah ke susunan kolom di layar kecil */
+            text-align: center;
+        }
+        .umkm-card .logo {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
+<div class="umkm-list-container">
+    <h2>Usaha Mikro, Kecil, dan Menengah (UMKM) Desa Boyemare</h2>
+    {% if umkm_list %}
+        {% for umkm in umkm_list %}
+            <div class="umkm-card">
+                {% if umkm.logo_umkm %}
+                    <div class="logo">
+                        {# Pastikan MEDIA_URL dikonfigurasi di settings.py agar umkm.logo_umkm.url bekerja #}
+                        <img src="{{ umkm.logo_umkm.url }}" alt="Logo {{ umkm.nama_umkm }}">
+                    </div>
+                {% else %}
+                    <div class="logo">
+                        {# Pastikan Anda memiliki 'default_umkm_logo.png' di folder 'static' Anda #}
+                        <img src="{% static 'default_umkm_logo.png' %}" alt="Logo Default">
+                    </div>
+                {% endif %}
+                <div class="info">
+                    <h3>{{ umkm.nama_umkm }}</h3>
+                    <p>Jenis Usaha: <strong>{{ umkm.jenis_usaha }}</strong></p>
+                    {% if umkm.deskripsi %}
+                        <p>{{ umkm.deskripsi|truncatechars:150 }}</p> {# Batasi panjang deskripsi untuk tampilan ringkas #}
+                    {% endif %}
+                    <div class="details">
+                        Pemilik: {{ umkm.nama_pemilik }}<br>
+                        {% if umkm.kontak_pemilik %}
+                            Kontak: {{ umkm.kontak_pemilik }}<br>
+                        {% endif %}
+                        {% if umkm.alamat %}
+                            Alamat: {{ umkm.alamat }}<br>
+                        {% endif %}
+                        {% if umkm.tahun_berdiri %}
+                            Berdiri Sejak: {{ umkm.tahun_berdiri }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-umkm">Belum ada data UMKM yang tersedia.</p>
+    {% endif %}
+</div>
+{% endblock %}
