@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<style>
+    /* --- Gaya untuk Halaman Detail Artikel (artikel_detail.html) --- */
+
+    /* Penting: Beberapa gaya dasar (body, h1, h2, dll.) mungkin sudah ada di base.html atau CSS lain. */
+    /* Pastikan tidak ada konflik atau duplikasi yang tidak diinginkan. */
+
+    .article-page-wrapper {
+        /* background-color: #f0f2f5; */ /* DIHAPUS/DIUBAH: Latar belakang halaman detail artikel agar transparan ke body */
+        padding: 40px 20px; /* Padding atas-bawah dan samping */
+        min-height: calc(100vh - /* tinggi_header */ - /* tinggi_footer */); /* Pastikan halaman terisi penuh */
+        display: flex;
+        justify-content: center; /* Pusatkan konten horizontal */
+        align-items: flex-start; /* Sejajarkan ke atas vertikal */
+    }
+
+    .article-container {
+        max-width: 900px; /* Lebar maksimal kontainer artikel */
+        background-color: rgba(255, 255, 255, 0.85); /* Ubah menjadi putih semi-transparan untuk kontras */
+        border-radius: 12px; /* Sudut lebih bulat */
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); /* Bayangan tetap ada, mungkin perlu disesuaikan */
+        padding: 50px 60px; /* Padding internal yang lebih besar */
+        margin: 20px 0; /* Margin atas/bawah */
+    }
+
+    /* Header Artikel */
+    .article-header {
+        text-align: center;
+        margin-bottom: 40px;
+        border-bottom: 1px solid #eee; /* Garis pemisah tipis */
+        padding-bottom: 30px;
+    }
+
+    .article-title {
+        font-family: 'Montserrat', sans-serif; /* Pastikan font ini diimpor di base.html */
+        font-size: 3.2em; /* Ukuran judul lebih besar */
+        color: #2c3e50; /* Warna gelap untuk judul */
+        margin-bottom: 15px;
+        line-height: 1.25;
+        font-weight: 700; /* Tebal */
+    }
+
+    .article-meta {
+        font-size: 0.95em;
+        color: #888;
+        margin-bottom: 0; /* Tidak ada margin bawah */
+    }
+
+    .article-meta .author,
+    .article-meta .date {
+        font-weight: 500; /* Sedikit tebal */
+        color: #555;
+    }
+
+    .article-featured-image {
+        width: 100%;
+        max-height: 500px; /* Tinggi maksimum gambar */
+        object-fit: cover; /* Pastikan gambar mengisi area tanpa distorsi, memotong jika perlu */
+        border-radius: 10px;
+        margin-top: 40px; /* Jarak dari meta info */
+        margin-bottom: 40px; /* Jarak ke konten */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Isi Konten Artikel */
+    .article-content-body {
+        font-family: 'Roboto', sans-serif; /* Pastikan font ini diimpor di base.html */
+        font-size: 1.15em; /* Ukuran font sedikit lebih besar untuk keterbacaan */
+        line-height: 1.9; /* Jarak antar baris lebih longgar */
+        color: #444;
+        margin-bottom: 50px; /* Jarak ke footer */
+        text-align: justify; /* TEKS RATA KIRI-KANAN */
+    }
+
+    .article-content-body p {
+        margin-bottom: 1.5em; /* Jarak antar paragraf lebih besar */
+        text-align: justify; /* Pastikan paragraf juga justify */
+    }
+
+    /* Gaya untuk elemen di dalam konten (jika ada) */
+    .article-content-body h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.2em;
+        color: #2c3e50;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0; /* Garis bawah yang lebih tebal */
+        text-align: left; /* Sub-judul biasanya rata kiri, bukan justify */
+    }
+
+    .article-content-body h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 1.8em;
+        color: #34495e;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        text-align: left; /* Sub-judul biasanya rata kiri, bukan justify */
+    }
+
+    .article-content-body ul,
+    .article-content-body ol {
+        margin-left: 25px;
+        margin-bottom: 1.5em;
+        text-align: left; /* Daftar biasanya rata kiri */
+    }
+
+    .article-content-body li {
+        margin-bottom: 0.8em;
+    }
+
+    .article-content-body blockquote {
+      
+        padding-left: 20px;
+        margin: 20px 0;
+        font-style: italic;
+        color: #666;
+        background-color: #f9fdf9;
+        border-radius: 5px;
+        padding: 15px 20px;
+        text-align: left; /* Kutipan biasanya rata kiri */
+    }
+
+    /* Footer Artikel */
+    .article-footer {
+        display: flex;
+        justify-content: center; /* Pusatkan tombol kembali */
+        padding-top: 30px;
+        border-top: 1px solid #eee; /* Garis pemisah tipis */
+    }
+
+    .btn-back-to-home {
+        display: inline-flex;
+        align-items: center;
+        background-color: #3498db; /* Warna biru cerah */
+        color: white;
+        padding: 14px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.05em;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); /* Bayangan untuk tombol */
+    }
+
+    .btn-back-to-home:hover {
+        background-color: #2980b9; /* Warna biru lebih gelap saat hover */
+        transform: translateY(-2px); /* Efek angkat sedikit */
+    }
+
+    /* Media Queries untuk Responsif */
+    @media (max-width: 768px) {
+        .article-container {
+            padding: 30px;
+            margin: 15px;
+        }
+        .article-title {
+            font-size: 2.2em;
+        }
+        .article-header {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+        }
+        .article-featured-image {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+        .article-content-body {
+            font-size: 1em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+        .btn-back-to-home {
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .article-container {
+            padding: 20px;
+            margin: 10px;
+        }
+        .article-title {
+            font-size: 1.8em;
+        }
+        .article-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+        }
+        .article-featured-image {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    }
+
+    /* --- Penyesuaian untuk header dan body jika ingin transparan --- */
+    /* Ini mengasumsikan warna hijau berasal dari elemen di base.html */
+    /* Jika header Desa Kita ada di base.html dan memiliki background-color, Anda perlu mengubahnya di sana. */
+    body {
+        background-image: url('URL_GAMBAR_LATAR_BELAKANG_ANDA.jpg'); /* Ganti dengan gambar latar belakang desa */
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center center;
+    }
+
+    /* Pastikan elemen header di base.html memiliki background transparan atau diatur sesuai keinginan */
+    /* Contoh: */
+    /* header {
+        background-color: rgba(0, 0, 0, 0.5); // Hitam semi-transparan agar tulisan terlihat
+        color: white;
+    } */
+    /* Atau jika header Anda memiliki class/ID, targetkan itu */
+    /* .site-header {
+        background-color: transparent !important;
+        box-shadow: none !important;
+    } */
+
+    /* Mengubah background container artikel menjadi semi-transparan agar latar belakang utama terlihat */
+    /* .article-container sudah diatur di atas dengan rgba(255, 255, 255, 0.85) */
+</style>
+
+<main class="article-page-wrapper">
+    <div class="article-container">
+        <header class="article-header">
+            <h1 class="article-title">{{ article.title }}</h1>
+            <p class="article-meta">
+                Dipublikasikan oleh: <span class="author">Admin Desa Kita</span> |
+                Tanggal: <span class="date">{{ article.created_at|date:"d M Y, H:i" }}</span>
+            </p>
+            {% if article.gambar_utama %}
+                <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}" class="article-featured-image">
+            {% endif %}
+        </header>
+
+        <section class="article-content-body">
+            {{ article.content|safe }}
+        </section>
+
+        <footer class="article-footer">
+            <a href="{% url 'index' %}" class="btn-back-to-home">
+                Kembali ke Beranda
+            </a>
+        </footer>
+    </div>
+</main>
+{% endblock %}

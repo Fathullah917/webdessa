@@ -1,86 +1,251 @@
 {% extends 'base.html' %}
 
-{% block title %}Beranda Desa Boyemare{% endblock %}
+{% block title %}Beranda Desa Kita{% endblock %}
 
 {% block content %}
 <style>
-    .articles-list {
-        padding: 20px;
-        max-width: 900px;
-        margin: 30px auto;
-        background-color: #f9f9f9;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    /* --- Gaya untuk Halaman Daftar Berita (home.html atau artikel_list.html) --- */
+
+    /* Penting: Beberapa gaya dasar (body, h1, h2, dll.) mungkin sudah ada di base.html atau CSS lain. */
+    /* Pastikan tidak ada konflik atau duplikasi yang tidak diinginkan. */
+
+    .homepage-content-wrapper {
+        padding: 40px 20px; /* Padding global untuk konten utama */
+        background-color: #f0f2f5; /* Latar belakang lembut untuk halaman beranda */
     }
-    .articles-list h2 {
-        color: #2ECC71;
-        font-size: 30px;
-        margin-bottom: 30px;
+
+    .articles-section-container {
+        max-width: 1200px; /* Lebar maksimal kontainer daftar artikel */
+        margin: 0 auto; /* Pusatkan di tengah */
+    }
+
+    .section-title {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5em;
+        color: #2c3e50;
         text-align: center;
-        font-weight: 700;
+        margin-bottom: 40px;
     }
-    .article-card {
-        background-color: #ffffff;
+
+    /* Hapus atau nonaktifkan ini jika Anda menggunakan Swiper */
+    /* .articles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    } */
+
+    /* Penting: Pastikan .swiper-slide memiliki tinggi yang cukup atau disesuaikan */
+    .swiper-slide {
+        height: auto; /* Memungkinkan konten di dalamnya menentukan tinggi */
+        display: flex; /* Gunakan flexbox agar kartu mengisi slide */
+        align-items: stretch; /* Agar semua kartu memiliki tinggi yang sama di satu baris */
+    }
+
+    .article-summary-card {
+        background-color: #ffffff; /* Latar belakang putih untuk setiap kartu */
         border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Bayangan lembut */
         padding: 25px;
+        /* margin-bottom: 30px; DIHAPUS jika menggunakan grid gap */
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden; /* Pastikan tidak ada konten yang meluap */
+        display: flex; /* Menggunakan flexbox untuk tata letak internal kartu */
+        flex-direction: column; /* Konten vertikal */
+        width: 100%; /* Pastikan kartu mengisi lebar slide */
+        height: 100%; /* Pastikan kartu mengisi tinggi slide */
     }
-    .article-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+
+    .article-summary-card:hover {
+        transform: translateY(-5px); /* Efek angkat saat hover */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); /* Bayangan lebih gelap saat hover */
     }
-    .article-card h3 {
-        color: #34495E;
+
+    .summary-title {
+        font-family: 'Montserrat', sans-serif;
         font-size: 1.8em;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
-    .article-card p {
-        color: #555;
-        line-height: 1.6;
+        color: #2c3e50;
         margin-bottom: 15px;
+        line-height: 1.3;
+        flex-grow: 1; /* Agar judul mengambil ruang vertikal yang tersedia */
     }
-    .article-card .meta-info {
-        font-size: 0.9em;
-        color: #7f8c8d;
-        margin-top: 15px;
-        text-align: right;
-    }
-    .article-card img {
-        max-width: 100%;
-        height: auto;
+
+    .summary-image {
+        width: 100%;
+        height: 250px; /* Tinggi tetap untuk gambar */
+        object-fit: cover; /* Pastikan gambar mengisi area dengan baik */
         border-radius: 8px;
-        margin-bottom: 15px;
-        display: block;
+        margin-bottom: 20px;
     }
+
+    .summary-content {
+        flex-grow: 1; /* Konten ringkasan mengambil sisa ruang vertikal */
+    }
+
+    .summary-content p {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1em;
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 20px;
+        /* text-align: justify; */ /* Opsional: jika ingin ringkasan rata kiri-kanan */
+    }
+
+    .summary-footer {
+        display: flex;
+        justify-content: space-between; /* Untuk menempatkan tombol di kiri dan tanggal di kanan */
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #eee; /* Garis pemisah */
+        margin-top: auto; /* Dorong footer ke bawah kartu */
+    }
+
+    /* Gaya untuk tombol "Baca Selengkapnya" */
+    .btn-read-more {
+        display: inline-block; /* Agar bisa menerapkan padding dan margin */
+        background-color: #2ecc71; /* Warna hijau cerah */
+        color: white;
+        padding: 10px 20px;
+        border-radius: 6px; /* Sudut membulat */
+        text-decoration: none; /* Hapus garis bawah */
+        font-weight: 600;
+        font-size: 0.95em;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3); /* Bayangan untuk tombol */
+    }
+
+    .btn-read-more:hover {
+        background-color: #27ae60; /* Warna hijau lebih gelap saat hover */
+        transform: translateY(-2px); /* Efek angkat sedikit */
+    }
+
+    .published-date {
+        font-size: 0.85em;
+        color: #999;
+    }
+
     .no-articles {
         text-align: center;
-        color: #7f8c8d;
-        font-style: italic;
+        font-size: 1.2em;
+        color: #777;
+        padding: 50px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         margin-top: 30px;
-        font-size: 1.1em;
+    }
+
+    /* Gaya untuk panah navigasi Swiper */
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #3498db; /* Warna panah */
+    }
+
+    .swiper-pagination-bullet-active {
+        background: #2ecc71; /* Warna titik aktif pagination */
+    }
+
+    /* Anda mungkin perlu menyesuaikan posisi panah navigasi jika terganggu */
+    .swiper-container { /* atau .mySwiper */
+        padding-left: 50px; /* Ruang untuk tombol prev */
+        padding-right: 50px; /* Ruang untuk tombol next */
+    }
+    .swiper-button-prev {
+        left: 0;
+    }
+    .swiper-button-next {
+        right: 0;
+    }
+
+
+    /* Media Queries untuk Responsif */
+    @media (max-width: 768px) {
+        .articles-grid { /* Jika Anda tetap menggunakan grid untuk non-swiper */
+            grid-template-columns: 1fr; /* Satu kolom di layar kecil */
+        }
+        .article-summary-card {
+            padding: 20px;
+        }
+        .summary-title {
+            font-size: 1.5em;
+        }
+        .summary-image {
+            height: 200px;
+        }
+        .summary-footer {
+            flex-direction: column; /* Ubah tata letak jadi kolom di mobile */
+            align-items: flex-start;
+        }
+        .btn-read-more {
+            margin-bottom: 10px; /* Jarak antara tombol dan tanggal */
+            width: 100%; /* Tombol memenuhi lebar */
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2em;
+        }
     }
 </style>
 
-<div class="articles-list">
-    <h2>Berita & Informasi Terbaru Desa Boyemare</h2>
-    {% if articles %}
-        {% for article in articles %}
-            <div class="article-card">
-                <h3>{{ article.title }}</h3>
-                {% if article.gambar_utama %}
-                    <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}">
-                {% endif %}
-                <p>{{ article.content|truncatechars:300 }}</p>
-                <div class="meta-info">
-                    Dipublikasikan pada: {{ article.created_at|date:"d M Y, H:i" }}
+<main class="homepage-content-wrapper">
+    <div class="articles-section-container">
+        <h2 class="section-title">Berita & Informasi Terbaru Desa Andi </h2>
+        {% if articles %}
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    {% for article in articles %}
+                        <div class="swiper-slide">
+                            <div class="article-summary-card">
+                                <h3 class="summary-title">{{ article.title }}</h3>
+                                {% if article.gambar_utama %}
+                                    <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}" class="summary-image">
+                                {% endif %}
+                                <div class="summary-content">
+                                    <p class="excerpt">{{ article.content|truncatechars:250 }}</p>
+                                </div>
+                                
+                                <div class="summary-footer">
+                                    <a href="{% url 'artikel_detail' pk=article.id %}" class="btn-read-more">Baca Selengkapnya</a>
+                                    <p class="published-date">Dipublikasikan pada: {{ article.created_at|date:"d M Y, H:i" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
+                <div class="swiper-pagination"></div>
+
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
             </div>
-        {% endfor %}
-    {% else %}
-        <p class="no-articles">Belum ada artikel atau berita terbaru yang tersedia.</p>
-    {% endif %}
-</div>
+        {% else %}
+            <p class="no-articles">Belum ada artikel atau berita terbaru yang tersedia.</p>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+    // Initialize Swiper
+    var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 1, // Default: 1 slide per view
+        spaceBetween: 30, // Jarak antar slide
+        loop: true, // Untuk mengulang dari awal setelah slide terakhir
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            // Ketika lebar layar >= 768px
+            768: {
+                slidesPerView: 2, // Tampilkan 2 slide
+            },
+            // Ketika lebar layar >= 1024px
+            1024: {
+                slidesPerView: 3, // Tampilkan 3 slide
+            },
+        },
+    });
+</script>
 {% endblock %}

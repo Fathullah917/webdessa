@@ -3,20 +3,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburger = document.getElementById('hamburger-icon');
     const navMenu = document.getElementById('main-nav');
 
-    // Pastikan elemen ditemukan sebelum menambahkan event listener
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
-            navMenu.classList.toggle('active'); // Tambah/hapus class 'active'
+            navMenu.classList.toggle('active');
         });
 
-        // Opsional: Tutup menu saat link diklik (untuk UX yang lebih baik)
         document.querySelectorAll('#main-nav a').forEach(link => {
             link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                }
             });
         });
     } else {
-        // Pesan peringatan jika elemen tidak ditemukan (membantu debugging)
-        console.warn("Hamburger icon or navigation menu not found. Mobile navigation might not work.");
+        console.warn("Hamburger icon or navigation menu not found. Mobile navigation might not work correctly.");
     }
+
+    // Inisialisasi Swiper untuk Hero Section dan Articles Section
+    // (Kode inisialisasi Swiper kini ada di home.html karena lebih spesifik ke halaman itu)
+    // Pastikan Anda telah menyertakan Swiper JS CDN di base.html
 });

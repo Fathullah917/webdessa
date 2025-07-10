@@ -4,44 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Desa Boyemare Website{% endblock %}</title>
+    <title>{% block title %}Desa Kita Website{% endblock %}</title>
     
-    {# Memuat file CSS kustom Anda #}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
-    {# Memuat Google Fonts (Montserrat) #}
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
 </head>
 <body>
-    <header>
-        <h1>Desa Boyemare</h1>
-        
-        {# Hamburger menu, tampilkan hanya di mobile menggunakan CSS #}
-        <div class="hamburger-menu" id="hamburger-icon">
-            &#9776; {# Karakter unicode untuk ikon hamburger #}
+    <header class="site-header">
+        <div class="header-content">
+            <h1 class="site-logo">Desa Kita</h1>
+            
+            <div class="hamburger-menu" id="hamburger-icon">
+                &#9776; {# Unicode character for hamburger icon #}
+            </div>
+            
+            <nav id="main-nav">
+                <a href="{% url 'index' %}" class="nav-item">
+                    <i class="fas fa-home"></i> Beranda
+                </a>
+                <a href="{% url 'pengaduan_view' %}" class="nav-item">
+                    <i class="fas fa-bullhorn"></i> Pengaduan
+                </a>
+                <a href="{% url 'umkm_view' %}" class="nav-item">
+                    <i class="fas fa-store"></i> UMKM
+                </a>
+                <a href="{% url 'dataAPBDes_view' %}" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> Data APBDes
+                </a>
+                <a href="{% url 'about_view' %}" class="nav-item">
+                    <i class="fas fa-info-circle"></i> Tentang
+                </a>
+                <a href="#" class="nav-item"> {# Ganti '#' dengan URL yang sesuai jika ada halaman kontak #}
+                    <i class="fas fa-envelope"></i> Contact
+                </a> 
+            </nav>
         </div>
-        
-        <nav id="main-nav">
-            <a href="{% url 'home_view' %}">Beranda</a>
-            <a href="{% url 'pengaduan_view' %}">Pengaduan</a>
-            <a href="{% url 'umkm_view' %}">UMKM</a>
-            <a href="{% url 'dataAPBDes_view' %}">Data APBDes</a>
-            <a href="{% url 'about_view' %}">Tentang</a>
-            <a href="#">Contact</a> {# Jika ada halaman contact, ganti '#' dengan URL yang sesuai #}
-        </nav>
     </header>
 
-    <main class="articles-container">
-        {# Konten spesifik dari setiap halaman akan dimasukkan di sini #}
+    <main class="content-wrapper">
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
+    <footer class="site-footer">
         <p>&copy; 2025 MyDesa Website</p>
     </footer>
 
-    {# Memuat file JavaScript kustom Anda #}
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>

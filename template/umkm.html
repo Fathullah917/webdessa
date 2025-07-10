@@ -4,94 +4,206 @@
 {% block title %}Daftar UMKM Desa Boyemare{% endblock %}
 
 {% block content %}
-{# 
-    SANGAT DISARANKAN: 
-    Pindahkan semua CSS di bawah ini ke file eksternal Anda: 
-    'TUGAS UAS/static/css/style.css' 
-    untuk praktik terbaik dan pengelolaan yang lebih mudah.
-#}
+
 <style>
+    /* --- UMKM Specific Styles for a Modern Look (INLINE CSS) --- */
+
     .umkm-list-container {
-        padding: 30px;
-        max-width: 900px;
+        padding: 50px 30px; /* Lebih banyak padding */
+        max-width: 1000px; /* Sedikit lebih lebar */
         margin: 50px auto;
-        background-color: #f9f9f9;
-        border-radius: 12px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        background-color: rgba(255, 255, 255, 0.98); /* Hampir opaque white */
+        border-radius: 16px; /* Lebih membulat */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Bayangan lebih dalam dan halus */
+        border: 1px solid #f0f0f0; /* Border sangat tipis */
+        animation: fadeIn 0.8s ease-out; /* Animasi fade in */
     }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .umkm-list-container h2 {
-        color: #2ECC71;
-        font-size: 30px;
-        margin-bottom: 30px;
+        font-family: 'Montserrat', sans-serif;
+        color: #2c3e50; /* Warna lebih netral */
+        font-size: 2.8em; /* Ukuran lebih besar */
+        margin-bottom: 50px; /* Jarak lebih jauh dari konten */
         text-align: center;
         font-weight: 700;
+        position: relative;
+        padding-bottom: 15px; /* Ruang untuk underline */
     }
+
+    .umkm-list-container h2::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 80px; /* Underline pendek */
+        height: 4px;
+        background-color: #3498db; /* Warna accent biru */
+        border-radius: 2px;
+    }
+
     .umkm-card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        margin-bottom: 25px;
-        padding: 25px;
+        background-color: #ffffff; /* Latar belakang putih bersih */
+        border-radius: 12px; /* Lebih membulat */
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08); /* Bayangan yang lebih menonjol */
+        margin-bottom: 30px; /* Jarak antar kartu */
+        padding: 30px; /* Lebih banyak padding */
         display: flex;
-        align-items: center;
-        gap: 20px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        align-items: flex-start; /* Sejajarkan konten ke atas */
+        gap: 30px; /* Jarak antar elemen flex */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transisi lebih halus */
+        border: 1px solid #e8e8e8; /* Border halus */
+        /* Animasi slide in (ini akan membuat semua kartu muncul dari kiri saat dimuat) */
+        animation: slideInLeft 0.5s ease-out forwards;
+        opacity: 0; /* Mulai dengan transparan */
     }
+
+    /* Animasi slide in */
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
     .umkm-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        transform: translateY(-8px); /* Efek melayang yang lebih terasa */
+        box-shadow: 0 12px 35px rgba(0,0,0,0.15); /* Bayangan lebih intens saat hover */
     }
+
     .umkm-card .logo {
-        flex-shrink: 0; /* Mencegah logo menyusut */
-        width: 100px;
-        height: 100px;
-        border-radius: 50%; /* Membuat lingkaran */
-        overflow: hidden; /* Memastikan gambar tidak meluap dari lingkaran */
-        border: 2px solid #eee;
+        flex-shrink: 0;
+        width: 120px; /* Logo lebih besar */
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 4px solid #f5f5f5; /* Border lebih tebal dan terang */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Bayangan pada logo */
     }
+
     .umkm-card .logo img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi */
+        object-fit: cover;
     }
+
     .umkm-card .info {
-        flex-grow: 1; /* Memungkinkan info mengambil sisa ruang */
+        flex-grow: 1;
     }
+
     .umkm-card h3 {
-        color: #34495E;
-        font-size: 1.6em;
-        margin-bottom: 5px;
+        font-family: 'Montserrat', sans-serif;
+        color: #2c3e50;
+        font-size: 2em; /* Ukuran judul lebih besar */
+        margin-bottom: 8px; /* Jarak lebih baik */
+        font-weight: 700; /* Lebih tebal */
+    }
+
+    .umkm-card .jenis-usaha {
+        color: #3498db; /* Warna biru untuk jenis usaha */
+        font-size: 1.1em;
+        margin-bottom: 15px; /* Jarak ke deskripsi */
         font-weight: 600;
     }
-    .umkm-card p {
+
+    .umkm-card .jenis-usaha strong {
+        text-transform: uppercase; /* Jenis usaha huruf besar */
+    }
+
+    .umkm-card .deskripsi {
         color: #555;
-        line-height: 1.5;
-        margin-bottom: 8px;
-    }
-    .umkm-card .details {
+        line-height: 1.7;
+        margin-bottom: 20px;
         font-size: 0.95em;
-        color: #7f8c8d;
     }
+
+    .umkm-card .details p { /* Menggunakan p untuk setiap baris detail */
+        margin-bottom: 5px; /* Jarak antar baris detail */
+        color: #7f8c8d;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+
+    .umkm-card .details p:last-child {
+        margin-bottom: 0; /* Tidak ada margin di baris terakhir */
+    }
+
     .no-umkm {
         text-align: center;
         color: #7f8c8d;
         font-style: italic;
-        margin-top: 30px;
-        font-size: 1.1em;
+        margin-top: 50px;
+        font-size: 1.2em;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
+
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
+        .umkm-list-container {
+            padding: 30px 20px; /* Padding lebih kecil di mobile */
+        }
+
+        .umkm-list-container h2 {
+            font-size: 2em; /* Ukuran judul lebih kecil */
+            margin-bottom: 40px;
+        }
+
         .umkm-card {
             flex-direction: column; /* Ubah ke susunan kolom di layar kecil */
             text-align: center;
+            padding: 25px; /* Padding disesuaikan */
+            gap: 20px;
         }
+
         .umkm-card .logo {
             margin-bottom: 15px;
+            width: 100px; /* Ukuran logo disesuaikan */
+            height: 100px;
+        }
+
+        .umkm-card h3 {
+            font-size: 1.7em;
+        }
+
+        .umkm-card .jenis-usaha {
+            font-size: 1em;
+        }
+
+        .umkm-card .deskripsi {
+            font-size: 0.9em;
+        }
+
+        .umkm-card .details p {
+            font-size: 0.85em;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .umkm-list-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+        }
+        .umkm-card {
+            padding: 20px;
+        }
+        .umkm-card .logo {
+            width: 80px;
+            height: 80px;
+        }
+        .umkm-card h3 {
+            font-size: 1.5em;
         }
     }
 </style>
 
 <div class="umkm-list-container">
-    <h2>Usaha Mikro, Kecil, dan Menengah (UMKM) Desa Boyemare</h2>
+    <h2>Usaha Mikro, Kecil, dan Menengah (UMKM) Desa Kita</h2>
     {% if umkm_list %}
         {% for umkm in umkm_list %}
             <div class="umkm-card">
@@ -108,20 +220,20 @@
                 {% endif %}
                 <div class="info">
                     <h3>{{ umkm.nama_umkm }}</h3>
-                    <p>Jenis Usaha: <strong>{{ umkm.jenis_usaha }}</strong></p>
+                    <p class="jenis-usaha">Jenis Usaha: <strong>{{ umkm.jenis_usaha }}</strong></p> {# Tambah class untuk styling #}
                     {% if umkm.deskripsi %}
-                        <p>{{ umkm.deskripsi|truncatechars:150 }}</p> {# Batasi panjang deskripsi untuk tampilan ringkas #}
+                        <p class="deskripsi">{{ umkm.deskripsi|truncatechars:150 }}</p> {# Tambah class #}
                     {% endif %}
                     <div class="details">
-                        Pemilik: {{ umkm.nama_pemilik }}<br>
+                        <p>Pemilik: {{ umkm.nama_pemilik }}</p>
                         {% if umkm.kontak_pemilik %}
-                            Kontak: {{ umkm.kontak_pemilik }}<br>
+                            <p>Kontak: {{ umkm.kontak_pemilik }}</p>
                         {% endif %}
                         {% if umkm.alamat %}
-                            Alamat: {{ umkm.alamat }}<br>
+                            <p>Alamat: {{ umkm.alamat }}</p>
                         {% endif %}
                         {% if umkm.tahun_berdiri %}
-                            Berdiri Sejak: {{ umkm.tahun_berdiri }}
+                            <p>Berdiri Sejak: {{ umkm.tahun_berdiri }}</p>
                         {% endif %}
                     </div>
                 </div>

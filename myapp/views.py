@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 # Tambahkan get_object_or_404
 from django.utils import timezone
 from django.contrib import messages
 
@@ -88,3 +88,14 @@ def pengaduan_view(request):
         'pengaduan_status_mingguan': pengaduan_status_mingguan
     }
     return render(request, 'pengaduan.html', context) # Memanggil template 'pengaduan.html'
+
+
+# --- View BARU untuk Detail Artikel ---
+def artikel_detail_view(request, pk):
+    # Mengambil objek Article berdasarkan primary key (pk)
+    # Jika tidak ditemukan, akan otomatis melempar 404
+    article = get_object_or_404(Article, pk=pk)
+    context = {
+        'article': article
+    }
+    return render(request, 'artikel_detail.html', context)
