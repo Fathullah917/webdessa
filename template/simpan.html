@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Situs Desa Saya{% endblock %}</title>
+
+    {# Favicon #}
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+
+    {# Google Fonts #}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    {# Font Awesome Icons #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    {# Swiper.js CSS #}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    {# Custom CSS Anda #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-left">
+            <div class="logo-container">
+                <img src="{% static 'img/logo.png' %}" alt="Logo Desa" class="header-logo">
+                <div class="site-title-text">
+                    <h1 class="site-logo">DESA KITA</h1>
+                    <span>Kec. Sakra Barat</span>
+                </div>
+            </div>
+            <button class="hamburger-menu" id="hamburger-icon">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav id="main-nav">
+            <a href="{% url 'home' %}" class="nav-item"><i class="fas fa-home"></i> Beranda</a>
+            <a href="{% url 'pengaduan' %}" class="nav-item"><i class="fas fa-bullhorn"></i> Pengaduan</a>
+            <li class="nav-item dropdown"> {# Added dropdown class for Potensi Desa #}
+                <a href="{% url 'potensi_desa_index' %}"><i class="fas fa-seedling"></i> Potensi Desa <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'wisata' %}">Wisata</a>
+                    <a href="{% url 'pertanian' %}">Pertanian</a>
+                    <a href="{% url 'budaya' %}">Budaya</a>
+                    <a href="{% url 'potensi_umkm' %}">UMKM</a>
+                </div>
+            </li>
+            <a href="{% url 'data_apbdesa' %}" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Data APBDes</a>
+            <a href="{% url 'about' %}" class="nav-item"><i class="fas fa-info-circle"></i> Tentang</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block hero %}
+        {# Hero section tanpa overlay hitam transparan, gambar di set via CSS atau langsung di sini #}
+        <section class="hero-section" style="background-image: url('{% static 'static/img/bg.jpg' %}');"> {# Ganti 'hero-bg.jpg' dengan nama gambar latar belakang Anda #}
+            <div class="hero-content-wrapper">
+                <div class="welcome-box">
+                    <h2>Selamat Datang di Website Resmi</h2>
+                    <h1>Desa Kita</h1>
+                    <p>Kec. Sakra Barat, Lotim</p>
+                </div>
+                <div class="person-box">
+                    <img src="{% static 'img/pp.jpg' %}" alt="Foto Kepala Desa">
+                    <h3>Ahmad Fathullah,</h3>
+                    <p>KEPALA DESA KITA</p>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+
+        <div class="content-wrapper">
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    {# --- BAGIAN FOOTER BARU --- #}
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-contact">
+                <h3>Hubungi Kami</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Kantor Desa Kita, Kec. Sakra Barat, Lombok Timur</p>
+                <p><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 16:00 WITA</p>
+                <p><i class="fas fa-phone"></i> +62 812-3456-7890</p> {# Ganti dengan nomor telepon desa #}
+                <p><i class="fas fa-envelope"></i> <a href="mailto:desaboyemare@example.com">desaboyemare@example.com</a></p> {# Ganti dengan email desa #}
+                <div class="social-links">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-map">
+                <h3>Lokasi Kami</h3>
+                {# Ganti src iframe dengan embed map Google Maps desa Anda #}
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.4069811440784!2d116.42784557451963!3d-8.665790487531776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcd220d09990e63%3A0xfcf1081395b058c!2sKantor%20Kepala%20Desa%20Boyemare!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
+                        width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                <p class="map-note"><a href="https://maps.app.goo.gl/YourDesaGoogleMapsLink" target="_blank">Lihat Peta Lebih Besar</a></p> {# Ganti dengan link Google Maps desa Anda #}
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>© {% now "Y" %} Desa Kita. Semua Hak Dilindungi.</p>
+                <p>Dikembangkan oleh @hmadfath.</p>
+            </div>
+        </div>
+    </footer>
+    {# --- END FOOTER --- #}
+
+    {# Tombol WhatsApp Mengambang #}
+    <div class="whatsapp-float-button">
+        <a href="https://wa.me/6287859548565" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-whatsapp"></i> Ada yang bisa dibantu?
+        </a>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    {# Script untuk dropdown Potensi Desa jika Anda ingin fungsionalitas hover/klik #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownNav = document.querySelector('nav .dropdown'); // Select dropdown within nav
+            if (dropdownNav) {
+                const dropdownContent = dropdownNav.querySelector('.dropdown-content');
+                let timeout;
+
+                dropdownNav.addEventListener('mouseenter', () => {
+                    clearTimeout(timeout);
+                    dropdownContent.style.display = 'block';
+                    setTimeout(() => dropdownContent.style.opacity = '1', 10);
+                });
+
+                dropdownNav.addEventListener('mouseleave', () => {
+                    timeout = setTimeout(() => {
+                        dropdownContent.style.opacity = '0';
+                        setTimeout(() => dropdownContent.style.display = 'none', 300);
+                    }, 100);
+                });
+
+                // For mobile/touch devices (toggle on click)
+                dropdownNav.addEventListener('click', (e) => {
+                    // Check if the click is on the dropdown itself, not an item inside
+                    if (e.target.closest('.dropdown > a') || e.target.closest('.dropdown')) {
+                        e.preventDefault(); // Prevent default link behavior
+                        if (dropdownContent.style.display === 'block') {
+                            dropdownContent.style.opacity = '0';
+                            setTimeout(() => dropdownContent.style.display = 'none', 300);
+                        } else {
+                            dropdownContent.style.display = 'block';
+                            setTimeout(() => dropdownContent.style.opacity = '1', 10);
+                        }
+                    }
+                });
+            }
+
+            // Hamburger menu functionality
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const mainNav = document.getElementById('main-nav');
+
+            if (hamburgerIcon && mainNav) {
+                hamburgerIcon.addEventListener('click', () => {
+                    mainNav.classList.toggle('nav-open');
+                    hamburgerIcon.querySelector('i').classList.toggle('fa-bars');
+                    hamburgerIcon.querySelector('i').classList.toggle('fa-times'); // Change icon to 'X'
+                });
+            }
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

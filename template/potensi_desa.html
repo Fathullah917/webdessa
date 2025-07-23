@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title_text }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ... (CSS Anda di sini, tidak perlu diubah) ... */
+
+    /* Animation delay for each card */
+    {% for potensi in potensi_list %}
+    .potensi-card:nth-child({{ forloop.counter }}) {
+        animation-delay: {{ potensi.animation_delay }}s;
+    }
+    {% endfor %}
+
+    /* ... (CSS lainnya di sini) ... */
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-section hero-small">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ title_text }}</h1>
+            <p>{{ description_text }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <img src="{% static 'images/potensi-hero-bg.jpg' %}" alt="Potensi Desa" class="hero-background">
+</section>
+{% endblock hero %}
+
+{% block content %}
+<section class="page-content">
+    <div class="container">
+        <h2 class="section-title">Jelajahi Potensi Desa Kami</h2>
+        <p class="section-description">Berbagai potensi yang ada di Desa Boyemare, mulai dari keindahan alam, hasil pertanian, kekayaan budaya, hingga inovasi UMKM lokal.</p>
+
+        <div class="potensi-grid">
+            {% for potensi in potensi_list %}
+            <div class="potensi-card">
+                {% if potensi.gambar_utama %}
+                    <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder-potensi.jpg' %}" alt="Gambar Potensi">
+                {% endif %}
+                <div class="potensi-card-content">
+                    <h3>{{ potensi.nama_potensi }}</h3>
+                    <p>{{ potensi.deskripsi|truncatechars:150 }}</p>
+                    <div class="potensi-card-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi }}</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{ potensi.tanggal_publikasi|date:"d M Y" }}</span>
+                    </div>
+                    {# HANYA GUNAKAN SALAH SATU OPSI DI BAWAH INI #}
+
+                    {# Opsi 1: Jika Anda belum punya halaman detail, pakai link dummy #}
+                    <a href="#" class="btn-secondary">Baca Selengkapnya</a>
+
+                    {# Opsi 2: Jika Anda ingin kembali ke link_detail dari model (yang mungkin kosong atau tidak valid) #}
+                    {# {% if potensi.link_detail %}
+                        <a href="{{ potensi.link_detail }}" class="btn-secondary">Lihat Detail</a>
+                    {% else %}
+                        <a href="#" class="btn-secondary">Baca Selengkapnya</a>
+                    {% endif %} #}
+
+                    {# Opsi 3: Ini adalah bagian yang menyebabkan error karena 'potensi_desa_detail' tidak ada #}
+                    {# {% if potensi.pk %}
+                        <a href="{% url 'potensi_desa_detail' potensi.pk %}" class="btn-secondary">Lihat Detail</a>
+                    {% else %}
+                        <a href="#" class="btn-secondary">Baca Selengkapnya</a>
+                    {% endif %} #}
+
+                </div>
+            </div>
+            {% empty %}
+            <p>Belum ada data potensi desa yang tersedia. Silakan tambahkan melalui halaman Admin.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

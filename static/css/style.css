@@ -1,730 +1,735 @@
-/* --- General Styles --- */
+/* General Body and Container Styles */
 body {
-    font-family: 'Roboto', sans-serif; /* Modern font for body */
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    color: #34495E; /* Dark muted blue for text */
-    /* BACKGROUND TETAP DI BODY */
-    background-image: url('../images/ss.png'); /* Path to your background image */
-    background-size: cover; /* Memastikan gambar menutupi seluruh area */
-    background-position: center; /* Menengahkan gambar */
-    background-repeat: no-repeat; /* Mencegah pengulangan gambar */
-    background-attachment: fixed; /* Membuat background statis saat scrolling */
+    background-color: #f4f7f6; /* Warna latar belakang umum */
+    color: #333;
+    line-height: 1.6;
 }
 
-/* OVERLAY GLOBAL untuk darkening background di seluruh halaman */
-/* Ini penting agar teks dan konten lain lebih mudah dibaca di atas background gambar */
-body::before {
-    content: "";
-    position: fixed; /* Essential for overlay to cover the entire viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(25, 24, 24, 0.4); /* Darker overlay for better contrast, adjust as needed */
-    z-index: -1; /* Ensures overlay is beneath the main body content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-/* --- Link Defaults --- */
-a {
-    text-decoration: none;
-    color: inherit; /* Inherits text color from parent */
-}
-
-/* --- Header & Navigation --- */
+/* Header Styles */
 .site-header {
-    background-color: #388E3C; /* A more modern, slightly darker green */
-    padding: 20px 30px; /* Slightly reduced padding for a sleeker look */
-    color: #ECF0F1; /* Light gray for better contrast on the new green */
+    background-color: #388E3C; /* Warna hijau khas Desa Boyemare */
+    color: white;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-    backdrop-filter: blur(8px); /* Increased blur for a more pronounced effect */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Softer, less prominent shadow */
-    position: sticky; /* Makes header stick to the top */
+    position: sticky;
     top: 0;
-    z-index: 1000; /* Ensures header is above other content */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.site-logo {
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Menghilangkan underline pada link logo */
+    color: white; /* Warna teks logo */
+}
+
+.header-logo {
+    height: 40px; /* Sesuaikan tinggi logo */
+    margin-right: 10px;
+}
+
+.site-title-text .site-logo {
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 28px; /* Slightly smaller logo for a cleaner look */
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.15); /* Subtler text shadow */
-    color: #FFFFFF; /* White logo text */
-}
-
-/* Hamburger Menu Icon Styling */
-.hamburger-menu {
-    display: none; /* Hidden by default on desktop */
-    font-size: 28px; /* Slightly smaller hamburger icon */
-    cursor: pointer;
-    color: #FFFFFF; /* White color */
-    background: none;
-    border: none;
-    padding: 0;
-    line-height: 1; /* Prevents extra space around icon */
-    z-index: 1001; /* Ensures icon is clickable and above header */
-}
-
-/* Default desktop nav styles */
-#main-nav {
-    margin-top: 0;
-    display: flex; /* Uses flexbox for navigation links */
-}
-
-#main-nav .nav-item {
-    color: #FFFFFF;
-    font-weight: 500; /* Slightly lighter font weight for nav items */
-    font-size: 16px; /* Slightly smaller font size for nav items */
-    transition: all 0.3s ease-in-out; /* Smooth transitions */
-    position: relative; /* For underline effect on hover */
-    padding: 5px 0; /* Add padding for easier clicking */
-    display: flex; /* Aligns icon and text */
-    align-items: center; /* Vertically centers icon and text */
-    margin: 0 10px; /* Reduced horizontal margin for nav items */
-}
-
-#main-nav .nav-item i { /* Styles for Font Awesome icons */
-    margin-right: 8px; /* Space between icon and text */
-    font-size: 1.1em; /* Icon size slightly larger than text */
-}
-
-#main-nav .nav-item::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -3px; /* Slightly closer underline */
-    left: 0;
-    background-color: #FDD835; /* A complementary yellow for the underline */
-    transition: width 0.3s ease-out;
-}
-
-#main-nav .nav-item:hover::after {
-    width: 100%; /* Expands underline on hover */
-}
-
-#main-nav .nav-item:hover {
-    color: #FDD835; /* Yellow color on hover */
-}
-
-/* --- Main Content Area Wrapper (untuk halaman lain selain home yang pakai hero) --- */
-.content-wrapper {
-    /* Padding dan min-height ini akan diabaikan oleh home.html karena main-content punya gayanya sendiri */
-    padding: 20px;
-    min-height: calc(100vh - 80px - 60px); /* Adjust height to fill screen (header + footer height) */
-}
-
-
-/* --- Hero Section Styling (Teks Overlay di atas BG ss.png) --- */
-.hero-section {
-    position: relative;
-    width: 100%;
-    height: 80vh; /* Sesuaikan tinggi sesuai keinginan */
-    color: white;
-    overflow: hidden;
-    /* Tidak ada background-image di sini, akan menggunakan background body */
-}
-
-/* Overlay khusus untuk hero section agar teks lebih jelas di atas ss.png */
-.hero-section .swiper-slide {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%; /* Penting agar slide mengisi tinggi hero-section */
-}
-
-.hero-section .swiper-slide::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Gunakan overlay yang lebih gelap jika ss.png terang, atau lebih transparan jika ingin ss.png lebih dominan */
-    background-color: rgba(0, 0, 0, 0.6); /* Lebih gelap dari overlay body */
-    backdrop-filter: blur(3px); /* Tambahkan blur sedikit pada hero section */
-    z-index: 1; /* Pastikan overlay di bawah konten hero */
-}
-
-.hero-content {
-    text-align: center;
-    padding: 20px;
-    position: relative; /* Agar di atas overlay */
-    z-index: 2; /* Di atas overlay */
-    max-width: 80%;
-}
-
-.hero-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 3.5em;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Pergelap shadow teks */
-    line-height: 1.2;
-}
-
-.hero-subtitle {
     font-size: 1.5em;
-    font-weight: 500;
-    margin-bottom: 30px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* Pergelap shadow teks */
-    line-height: 1.5;
+    font-weight: 700;
 }
 
-.hero-button {
-    display: inline-block;
-    background-color: #3498db;
-    color: white;
-    padding: 15px 30px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 1.2em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.site-title-text span {
+    font-size: 0.8em;
+    display: block;
+    opacity: 0.8;
 }
 
-.hero-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-}
-
-/* Swiper pagination for hero section */
-.hero-section .swiper-pagination {
-    position: absolute;
-    bottom: 20px; /* Posisi di bagian bawah hero section */
-    left: 0;
-    width: 100%;
+/* Navigation Styles */
+#main-nav {
     display: flex;
+    gap: 25px; /* Jarak antar item navigasi */
     align-items: center;
-    justify-content: center;
-    z-index: 3; /* Di atas konten hero jika perlu */
 }
 
-.hero-section .swiper-pagination-bullet {
-    width: 12px;
-    height: 12px;
-    display: inline-block;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    margin: 0 5px;
-    cursor: pointer;
-    opacity: 1; /* Make all dots visible */
-    transition: background 0.3s ease;
-}
-
-.hero-section .swiper-pagination-bullet-active {
-    background: white;
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5); /* Highlight active dot */
-}
-
-/* Swiper navigation arrows for hero section */
-.hero-section .swiper-button-prev,
-.hero-section .swiper-button-next {
+.nav-item {
     color: white;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 3; /* Di atas konten hero jika perlu */
-    font-size: 2em; /* Ukuran panah */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
     transition: color 0.3s ease;
 }
 
-.hero-section .swiper-button-prev:hover,
-.hero-section .swiper-button-next:hover {
-    color: #FFDE00; /* Warna kuning saat hover */
+.nav-item:hover {
+    color: #FFEB3B; /* Warna kuning saat hover */
 }
 
-.hero-section .swiper-button-prev {
-    left: 30px;
+/* Dropdown Menu */
+.nav-item.dropdown {
+    list-style: none; /* Menghilangkan bullet point dari li */
+    position: relative;
+    padding: 0; /* Reset padding default li */
 }
 
-.hero-section .swiper-button-next {
-    right: 30px;
+.nav-item.dropdown .nav-link {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-
-/* --- Main Content Area (Untuk Home Page di bawah Hero) --- */
-.main-content {
-    background-color: rgba(255, 255, 255, 0.95); /* Latar belakang putih semi-transparan untuk konten di bawah hero */
-    padding: 50px 30px;
-    max-width: 1100px; /* Lebar maksimum untuk fokus konten */
-    margin: -80px auto 40px auto; /* Margin negatif agar naik sedikit ke hero, auto untuk centering */
-    border-radius: 16px; /* Sudut membulat */
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
-    position: relative; /* Penting untuk z-index */
-    z-index: 50; /* Pastikan di atas hero jika ada overlap */
+.nav-item.dropdown .nav-link:hover {
+    color: #FFEB3B;
 }
 
-/* --- Article Section (Berita di Home Page) --- */
-.articles-section-container {
-    text-align: center; /* Mengatur teks di tengah */
-    padding-bottom: 50px; /* Jarak bawah */
-    margin-bottom: 30px; /* Jarak ke section berikutnya */
-    border-bottom: 1px solid #eee; /* Garis pemisah */
+.nav-item.dropdown .nav-link i.fa-caret-down {
+    margin-left: 8px;
+    font-size: 0.7em;
+    transition: transform 0.3s ease;
+}
+
+.nav-item.dropdown:hover .nav-link i.fa-caret-down {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #388E3C; /* Latar belakang dropdown sama dengan header */
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+    z-index: 1;
+    padding: 10px 0;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease, display 0.3s ease;
+    top: calc(100% + 10px); /* Jarak dari parent link */
+    left: 0;
+    transform-origin: top;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #4CAF50; /* Warna hijau sedikit lebih terang saat hover */
+    color: #FFEB3B;
+}
+
+.dropdown-content a i {
+    margin-right: 8px;
+    color: #FFEB3B; /* Warna ikon di dropdown */
+}
+
+/* Hamburger menu (for mobile) */
+.hamburger-menu {
+    display: none; /* Sembunyikan di desktop */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8em;
+    cursor: pointer;
+    z-index: 1001; /* Pastikan di atas nav saat dibuka */
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 450px; /* Tinggi hero section */
+    background-image: url('{% static "img/background-hero.jpg" %}'); /* Ganti dengan gambar latar belakang hero Anda */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    overflow: hidden; /* Pastikan konten tidak meluber */
+}
+
+.hero-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px; /* Jarak antara welcome-box dan person-box */
+    position: relative;
+    z-index: 2; /* Agar di atas overlay jika ada */
+}
+
+.welcome-box, .person-box {
+    background-color: rgba(0, 0, 0, 0.6); /* Latar belakang gelap transparan */
+    padding: 25px 40px;
+    border-radius: 10px;
+    text-align: left; /* Teks welcome-box rata kiri */
+    backdrop-filter: blur(5px); /* Efek blur pada latar belakang transparan */
+}
+
+.welcome-box h2 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.welcome-box h1 {
+    font-size: 3em;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+}
+
+.person-box {
+    text-align: center;
+}
+
+.person-box img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    margin-bottom: 10px;
+}
+
+.person-box h3 {
+    margin: 5px 0;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.person-box p {
+    margin: 0;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+/* Main Content Wrapper */
+.content-wrapper.container {
+    padding: 40px 20px; /* Padding untuk keseluruhan konten utama */
+}
+
+/* Section Styles (for separation) */
+.content-section {
+    background-color: white;
+    padding: 40px;
+    margin-bottom: 30px; /* Jarak antar bagian */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .section-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em;
-    color: #2c3e50; /* Darker text for title */
     text-align: center;
-    margin-bottom: 40px;
+    font-size: 2.2em;
+    color: #388E3C;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
 }
 
-/* Swiper specific styles for the articles carousel */
-.articlesSwiper { /* Menggunakan class baru untuk swiper artikel */
-    padding: 0 50px; /* Ruang untuk tombol navigasi */
-    position: relative; /* PENTING: Untuk positioning anak absolute */
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #FFEB3B; /* Garis bawah kuning */
+    margin: 10px auto 0;
+    border-radius: 2px;
 }
 
-.articlesSwiper .swiper-wrapper {
-    /* Swiper automatically sets display: flex */
+/* Berita & Informasi Terbaru Section */
+.articles-section-container {
+    /* Sudah ada style dasar di .content-section */
 }
 
-.articlesSwiper .swiper-slide {
-    height: auto; /* Allows content to determine height */
-    display: flex; /* Ensures card fills the slide */
-    align-items: stretch; /* Makes all cards in a row have the same height */
-    padding-bottom: 40px; /* Ruang untuk pagination di bawah */
+.no-articles {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 30px;
 }
 
-/* Gaya untuk setiap kartu ringkasan artikel */
+/* Swiper overrides for article cards */
+.swiper-container {
+    width: 100%;
+    padding-bottom: 50px; /* For pagination dots */
+    padding-top: 10px;
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .article-summary-card {
-    background-color: rgba(255, 255, 255, 1); /* Full opaque white for cards inside main-content */
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Soft shadow */
-    padding: 25px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    text-align: left; /* Teks di dalam kartu rata kiri */
-    border: 1px solid #e0e0e0;
+    height: 100%; /* Pastikan card mengisi tinggi slide */
+    width: 100%; /* Atau lebar maksimal yang Anda inginkan */
 }
 
 .article-summary-card:hover {
-    transform: translateY(-5px); /* Lift effect on hover */
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); /* Darker shadow on hover */
-}
-
-.summary-title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.8em;
-    color: #2c3e50;
-    margin-bottom: 15px;
-    line-height: 1.3;
-    flex-grow: 1; /* Allows title to take available vertical space */
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
 .summary-image {
     width: 100%;
-    height: 200px; /* Fixed height for image */
-    object-fit: cover; /* Ensures image fills area well */
-    border-radius: 8px;
-    margin-bottom: 20px;
+    height: 200px; /* Tinggi gambar berita */
+    object-fit: cover;
+    display: block;
+}
+
+.summary-title {
+    font-size: 1.3em;
+    color: #388E3C;
+    margin: 15px 15px 10px;
+    min-height: 2.6em; /* Untuk memastikan tinggi konsisten jika judul berbeda panjang */
+    line-height: 1.3;
 }
 
 .summary-content {
-    flex-grow: 1; /* Summary content takes remaining vertical space */
+    flex-grow: 1; /* Biarkan konten mengisi sisa ruang */
+    padding: 0 15px;
 }
 
-.summary-content p {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1em;
+.excerpt {
+    font-size: 0.95em;
     color: #555;
-    line-height: 1.7;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .summary-footer {
+    padding: 15px;
+    border-top: 1px solid #eee;
     display: flex;
-    justify-content: space-between; /* Positions button left, date right */
+    justify-content: space-between;
     align-items: center;
-    padding-top: 15px;
-    border-top: 1px solid #eee; /* Separator line */
-    margin-top: auto; /* Pushes footer to the bottom of the card */
+    flex-wrap: wrap; /* Agar responsif pada layar kecil */
+    gap: 10px;
 }
 
-/* Gaya untuk panah navigasi Swiper artikel */
-.articles-next,
-.articles-prev {
-    color: #3498db; /* Blue color for arrows */
-    position: absolute; /* Pastikan posisi absolut */
-    top: 50%; /* Tengah vertikal */
-    transform: translateY(-50%); /* Menyesuaikan posisi vertikal agar benar-benar di tengah */
-    z-index: 100; /* TINGKATKAN Z-INDEX AGAR SELALU DI ATAS KONTEN */
-    cursor: pointer;
-    font-size: 2em; /* Ukuran ikon */
-    transition: color 0.3s ease;
+.btn-read-more {
+    background-color: #388E3C;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
 }
 
-.articles-prev {
-    left: 10px; /* Jarak dari kiri container Swiper */
+.btn-read-more:hover {
+    background-color: #2E7D32;
 }
 
-.articles-next {
-    right: 10px; /* Jarak dari kanan container Swiper */
+.article-date {
+    font-size: 0.85em;
+    color: #777;
+    margin: 0;
 }
 
-.articles-next:hover,
-.articles-prev:hover {
-    color: #2980b9; /* Warna sedikit lebih gelap saat hover */
+/* Swiper Navigation and Pagination */
+.swiper-button-next, .swiper-button-prev {
+    color: #388E3C !important;
 }
 
-.articles-pagination.swiper-pagination-bullet-active {
-    background: #3498db; /* Blue color for active pagination dot */
+.swiper-pagination-bullet-active {
+    background-color: #388E3C !important;
 }
 
-/* --- Other Section Container (Contoh untuk UMKM/Pengaduan) --- */
-.other-section-container {
-    padding-top: 50px;
-    padding-bottom: 30px;
+/* Potensi Desa Section */
+.potential-section-container {
+    /* Sudah diatur oleh .content-section */
+    text-align: center; /* Untuk section description */
 }
 
+.section-description {
+    font-size: 1.1em;
+    color: #555;
+    margin-bottom: 40px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.potensi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 3 kolom, responsif */
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch; /* Agar tinggi card sama */
+}
+
+.potensi-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.potensi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.potensi-image {
+    width: 100%;
+    height: 200px; /* Tinggi gambar potensi */
+    object-fit: cover;
+    display: block;
+}
+
+.potensi-info {
+    padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.potensi-title {
+    font-size: 1.25em;
+    color: #388E3C;
+    margin: 0 0 10px;
+    min-height: 2.4em; /* Untuk konsistensi tinggi judul */
+}
+
+.potensi-excerpt {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Memastikan deskripsi mengambil ruang yang tersedia */
+}
+
+.potensi-meta {
+    font-size: 0.85em;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.potensi-meta i {
+    margin-right: 5px;
+}
+
+.potensi-actions {
+    margin-top: auto; /* Push ke bawah */
+}
+
+.btn-detail {
+    background-color: #FFEB3B; /* Warna kuning untuk detail potensi */
+    color: #333;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    display: inline-block; /* Agar bisa diatur padding/margin */
+    width: auto; /* Sesuaikan lebar */
+}
+
+.btn-detail:hover {
+    background-color: #FDD835;
+}
+
+
+/* Program Unggulan Desa Section */
 .program-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    margin-top: 30px;
+    justify-content: center;
 }
 
 .program-card {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Agar tombol selalu di bawah */
 }
 
 .program-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
 .program-card h3 {
-    color: #2c3e50;
-    font-size: 1.6em;
-    margin-bottom: 15px;
+    color: #388E3C;
+    font-size: 1.4em;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .program-card p {
-    color: #555;
-    font-size: 1em;
-    line-height: 1.6;
+    font-size: 0.95em;
+    color: #666;
     margin-bottom: 20px;
+    flex-grow: 1; /* Memastikan deskripsi mengisi ruang */
 }
 
 .small-button {
+    background-color: #607D8B; /* Warna abu-abu kebiruan */
+    color: white;
     padding: 10px 20px;
-    font-size: 1em;
-    margin-top: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: inline-block;
+    transition: background-color 0.3s ease;
 }
 
-
-/* --- Forms (Pengaduan, UMKM, etc.) --- */
-form {
-    max-width: 650px;
-    margin: 0 auto; /* Centers horizontally */
-    padding: 30px;
-    background-color: rgba(248, 249, 249, 0.9); /* 90% opaque background for forms */
-    border-radius: 12px;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05); /* Inner shadow for depth */
+.small-button:hover {
+    background-color: #455A64;
 }
 
-form label {
-    display: block;
-    font-weight: 600;
-    margin-top: 20px;
-    color: #34495E;
-    font-size: 16px;
-}
-
-form input[type="text"],
-form input[type="email"],
-form input[type="number"],
-form textarea {
-    width: calc(100% - 24px); /* Accounts for padding + border */
-    padding: 12px;
-    margin-top: 8px;
-    border: 1px solid #BDC3C7; /* Softer border color */
-    border-radius: 8px; /* More rounded */
-    font-size: 16px;
-    resize: vertical; /* Allows vertical resizing of textarea */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-form input[type="text"]:focus,
-form input[type="email"]:focus,
-form input[type="number"]:focus,
-form textarea:focus {
-    border-color: #3498db; /* Highlight focus with blue */
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
-    outline: none; /* Remove default browser outline */
-}
-
-/* --- Buttons --- */
-button,
-input[type="submit"],
-.btn-read-more { /* Applies styling to all buttons and read more link */
-    background-color: #3498db; /* Bright blue for buttons */
-    color: white;
-    border: none;
-    padding: 14px 25px; /* Larger padding */
-    font-size: 18px; /* Larger text */
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 30px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-button:hover,
-input[type="submit"]:hover,
-.btn-read-more:hover {
-    background-color: #2980b9; /* Darker blue on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
-}
-
-/* --- Footer --- */
+/* Footer Styles */
 .site-footer {
-    background-color: rgba(0, 0, 0, 0.7); /* Black semi-transparent, same as header */
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 80px; /* More top margin */
-    font-size: 15px;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    background-color: #263238; /* Warna abu-abu gelap */
+    color: #ddd;
+    padding: 40px 0 20px;
+    font-size: 0.9em;
 }
 
-/* --- Responsive Layout (Mobile Navigation & General Adjustments) --- */
-@media (max-width: 768px) { /* Screen size limit for activating hamburger */
-    .site-header {
-        flex-direction: row; /* Keeps elements on one row */
-        justify-content: space-between; /* Title and hamburger on opposite sides */
-        align-items: center;
-        padding: 20px 25px;
-    }
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
 
-    .site-logo {
-        font-size: 26px;
-    }
+.footer-contact h3,
+.footer-map h3 {
+    color: white;
+    font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
 
-    /* Show hamburger icon on mobile */
-    .hamburger-menu {
-        display: block;
-    }
+.footer-contact p {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+}
 
-    /* Hide default navigation on mobile */
+.footer-contact p i {
+    margin-right: 10px;
+    color: #FFEB3B; /* Warna ikon kontak */
+    font-size: 1.1em;
+    flex-shrink: 0;
+}
+
+.footer-contact a {
+    color: #FFEB3B;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact a:hover {
+    color: white;
+}
+
+.social-links {
+    margin-top: 20px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5em;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #FFEB3B;
+}
+
+.footer-map iframe {
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.map-note {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.8em;
+}
+
+.map-note a {
+    color: #FFEB3B;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.map-note a:hover {
+    color: white;
+}
+
+.footer-bottom {
+    border-top: 1px solid #444;
+    padding-top: 20px;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.85em;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
+
+/* WhatsApp Float Button */
+.whatsapp-float-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+}
+
+.whatsapp-float-button a {
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+}
+
+.whatsapp-float-button a:hover {
+    background-color: #1DA851;
+}
+
+.whatsapp-float-button i {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+/* Responsive Design (Mobile First, then adjust) */
+@media (max-width: 992px) {
     #main-nav {
-        position: absolute; /* Positions menu above content */
-        top: 100%; /* Starts below the header */
-        left: 0;
+        display: none; /* Sembunyikan navigasi di mobile secara default */
+        flex-direction: column;
         width: 100%;
-        height: 0; /* Hidden by default */
-        background-color: rgba(0, 0, 0, 0.95); /* Darker semi-transparent background for mobile menu */
-        flex-direction: column; /* Links stacked vertically */
-        overflow: hidden; /* Hides overflowing content */
-        transition: height 0.3s ease-in-out, padding 0.3s ease-in-out; /* Transition for opening/closing */
-        padding: 0 20px; /* Padding when closed */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        z-index: 999; /* Ensures menu is above main content */
+        position: absolute;
+        top: 70px; /* Di bawah header */
+        left: 0;
+        background-color: #388E3C;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        padding: 20px;
+        gap: 15px;
+        align-items: flex-start; /* Item rata kiri */
     }
 
-    /* Show navigation when 'active' class is added by JavaScript */
-    #main-nav.active {
-        height: auto; /* Allows content to determine height */
-        max-height: 300px; /* Optional: limit max height if many links */
-        padding: 20px 25px; /* Padding when open */
+    #main-nav.nav-open {
+        display: flex; /* Tampilkan saat hamburger diklik */
     }
 
-    #main-nav .nav-item {
-        display: flex; /* Each link is a separate row, with icon and text */
-        justify-content: center; /* Centers icon and text */
-        margin: 10px 0; /* Vertical spacing between links */
-        font-size: 18px;
-        text-align: center;
+    .hamburger-menu {
+        display: block; /* Tampilkan di mobile */
+    }
+
+    .nav-item {
+        width: 100%;
         padding: 10px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Separator line between links */
+        text-align: left;
     }
 
-    #main-nav .nav-item:last-child {
-        border-bottom: none; /* No line on the last link */
+    .nav-item.dropdown .dropdown-content {
+        position: static; /* Ubah posisi dropdown agar tidak tumpang tindih */
+        width: 100%;
+        box-shadow: none;
+        background-color: rgba(0,0,0,0.1); /* Sedikit transparan untuk visual */
+        border-radius: 0;
+        padding-left: 20px; /* Indentasi sub-menu */
     }
 
-    /* --- Responsive tweaks for smaller screens (main content) --- */
-    .hero-section {
-        height: 60vh; /* Shorter hero section on mobile */
-    }
-    .hero-title {
-        font-size: 2.2em; /* Smaller title */
-    }
-    .hero-subtitle {
-        font-size: 1.1em; /* Smaller subtitle */
-    }
-    .hero-button {
-        font-size: 1em;
-        padding: 12px 25px;
-    }
-    .hero-section .swiper-button-prev,
-    .hero-section .swiper-button-next {
-        font-size: 1.5em; /* Smaller arrows */
-    }
-    .hero-section .swiper-button-prev {
-        left: 15px;
-    }
-    .hero-section .swiper-button-next {
-        right: 15px;
+    .nav-item.dropdown:hover .nav-link i.fa-caret-down {
+        transform: rotate(0deg); /* Reset rotasi ikon di mobile */
     }
 
-    .main-content {
-        padding: 30px 20px;
-        margin: -40px auto 30px auto; /* Adjust negative margin for mobile */
+    .hero-content-wrapper {
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .articles-section-container {
-        padding-bottom: 40px;
+    .welcome-box, .person-box {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .welcome-box h1 {
+        font-size: 2.2em;
     }
 
     .section-title {
-        font-size: 2em; /* Smaller title on mobile */
-        margin-bottom: 30px;
+        font-size: 1.8em;
     }
 
-    .articlesSwiper {
-        padding: 0 10px; /* Kurangi padding di mobile agar panah tidak terlalu jauh */
-    }
-
-    .articles-next,
-    .articles-prev {
-        font-size: 1.5em; /* Ukuran panah lebih kecil di mobile */
-    }
-
-    .articles-prev {
-        left: 0px; /* Lebih dekat ke tepi */
-    }
-
-    .articles-next {
-        right: 0px; /* Lebih dekat ke tepi */
+    .potensi-grid, .program-cards-grid, .footer-grid {
+        grid-template-columns: 1fr; /* Satu kolom di layar kecil */
     }
 
     .article-summary-card {
-        padding: 20px;
-    }
-
-    .summary-title {
-        font-size: 1.5em;
-    }
-
-    .summary-image {
-        height: 180px; /* Adjust image height on mobile */
-    }
-
-    .summary-footer {
-        flex-direction: column; /* Stack button and date vertically on mobile */
-        align-items: flex-start;
-    }
-
-    .btn-read-more {
-        margin-bottom: 10px; /* Space between button and date */
-        width: 100%; /* Button fills width */
-        text-align: center;
-    }
-
-    .program-cards-grid {
-        grid-template-columns: 1fr; /* Single column on small mobile */
-    }
-
-    form {
-        padding: 20px;
+        margin: 0 auto; /* Tengah artikel card jika hanya 1 kolom */
+        max-width: 400px; /* Batasi lebar card di mobile */
     }
 }
 
-@media (max-width: 480px) { /* Even smaller screen adjustments */
-    .site-header {
-        padding: 15px 20px;
+@media (max-width: 768px) {
+    .header-logo {
+        height: 35px;
     }
 
-    .site-logo {
-        font-size: 22px;
-    }
-
-    #main-nav .nav-item {
-        margin: 8px 0;
-        font-size: 16px;
-    }
-
-    .hero-section {
-        height: 50vh;
-    }
-    .hero-title {
-        font-size: 1.8em;
-    }
-    .hero-subtitle {
-        font-size: 1em;
-    }
-    .hero-button {
-        font-size: 0.9em;
-        padding: 10px 20px;
-    }
-
-    .main-content {
-        padding: 20px 15px;
-        margin: -30px auto 20px auto;
-    }
-
-    .section-title {
-        font-size: 1.8em;
-        margin-bottom: 25px;
-    }
-
-    .article-summary-card h3 {
+    .site-title-text .site-logo {
         font-size: 1.3em;
     }
 
-    .article-summary-card p {
-        font-size: 0.9em;
+    .welcome-box h1 {
+        font-size: 1.8em;
     }
 
-    button,
-    input[type="submit"],
-    .btn-read-more {
-        padding: 12px 20px;
-        font-size: 16px;
+    .section-title {
+        font-size: 1.6em;
     }
-    .small-button {
-        font-size: 0.9em;
-        padding: 8px 15px;
-    }
-}
-
-/* UMKM Specific Styles (assuming these are from umkm.html and now in style.css) */
-.umkm-list-container {
-    padding: 30px;
-    max-width: 900px;
-    margin: 50px auto;
-    background-color: rgba(249, 249, 249, 0.9); /* Transparent from #f9f9f9 */
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-}
-.umkm-card {
-    background-color: rgba(255, 255, 255, 0.9); /* Transparent from #ffffff */
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    margin-bottom: 25px;
-    padding: 25px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

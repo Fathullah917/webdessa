@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title_text }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Styling for Potensi Desa cards (similar to potensi_desa.html) */
+    .potensi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .potensi-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        animation: slideInUp 0.6s ease-out forwards;
+        opacity: 0;
+    }
+
+    .potensi-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .potensi-card-content {
+        padding: 15px;
+    }
+
+    .potensi-card h3 {
+        margin-top: 0;
+        color: #333;
+        font-size: 1.4em;
+    }
+
+    .potensi-card p {
+        color: #666;
+        font-size: 0.95em;
+        line-height: 1.5;
+    }
+
+    .potensi-card-meta {
+        font-size: 0.8em;
+        color: #999;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .potensi-card-meta span {
+        margin-right: 10px;
+    }
+
+    /* Animation delay for each card */
+    {% for potensi in potensi_list %}
+    .potensi-card:nth-child({{ forloop.counter }}) {
+        animation-delay: {{ potensi.animation_delay }}s; {# FIXED HERE #}
+    }
+    {% endfor %}
+
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .potensi-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-section hero-small">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ title_text }}</h1>
+            <p>{{ description_text }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <img src="{% static 'images/budaya-hero-bg.jpg' %}" alt="Budaya Desa Boyemare" class="hero-background">
+</section>
+{% endblock hero %}
+
+{% block content %}
+<section class="page-content">
+    <div class="container">
+        <h2 class="section-title">Kekayaan Seni & Budaya</h2>
+        <p class="section-description">Jelajahi kekayaan seni tradisional, adat istiadat, upacara, dan warisan budaya yang dijunjung tinggi di Desa Kita.</p>
+
+        <div class="potensi-grid">
+            {% for potensi in potensi_list %}
+            <div class="potensi-card">
+                {% if potensi.gambar_utama %}
+                    <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder-budaya.jpg' %}" alt="Gambar Budaya">
+                {% endif %}
+                <div class="potensi-card-content">
+                    <h3>{{ potensi.nama_potensi }}</h3>
+                    <p>{{ potensi.deskripsi|truncatechars:150 }}</p>
+                    <div class="potensi-card-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi }}</span>
+                        <span><i class="fas fa-calendar-alt"></i> {{ potensi.tanggal_publikasi|date:"d M Y" }}</span>
+                    </div>
+                    {% if potensi.link_detail %}
+                        <a href="{{ potensi.link_detail }}" class="btn-secondary">Lihat Detail</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p>Belum ada data budaya yang tersedia.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

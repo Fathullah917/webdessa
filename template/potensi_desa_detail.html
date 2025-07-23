@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title_text }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    .detail-container {
+        padding: 40px 20px;
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        line-height: 1.8;
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
+
+    .detail-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .detail-header h1 {
+        font-size: 2.8em;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .detail-meta {
+        font-size: 0.9em;
+        color: #777;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .detail-meta span i {
+        margin-right: 5px;
+    }
+
+    .detail-content p {
+        margin-bottom: 15px;
+        font-size: 1.1em;
+        color: #555;
+        text-align: justify;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-link:hover {
+        background-color: #0056b3;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .detail-header h1 {
+            font-size: 2em;
+        }
+        .detail-image {
+            height: 250px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+{# Anda bisa menghapus block hero dari sini jika detail page tidak butuh hero besar #}
+{# Atau sesuaikan dengan gambar hero dari potensi itu sendiri #}
+<section class="hero-section hero-small">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ potensi.nama_potensi }}</h1>
+            <p>{{ potensi.deskripsi|truncatechars:150 }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    {% if potensi.gambar_utama %}
+        <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}" class="hero-background">
+    {% else %}
+        <img src="{% static 'images/placeholder-potensi.jpg' %}" alt="Detail Potensi" class="hero-background">
+    {% endif %}
+</section>
+{% endblock hero %}
+
+{% block content %}
+<section class="page-content">
+    <div class="detail-container">
+        {% if potensi.gambar_utama %}
+            <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}" class="detail-image">
+        {% else %}
+            <img src="{% static 'images/placeholder-potensi.jpg' %}" alt="Gambar Potensi" class="detail-image">
+        {% endif %}
+
+        <div class="detail-header">
+            <h1>{{ potensi.nama_potensi }}</h1>
+            <div class="detail-meta">
+                <span><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi }}</span>
+                <span><i class="fas fa-calendar-alt"></i> {{ potensi.tanggal_publikasi|date:"d M Y" }}</span>
+                <span><i class="fas fa-tag"></i> {{ potensi.jenis_potensi }}</span>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <p>{{ potensi.deskripsi|linebreaksbr }}</p> {# linebreaksbr akan mengubah newline jadi <br> #}
+            {# Tambahkan lebih banyak detail jika model PotensiDesa Anda memilikinya #}
+        </div>
+
+        <a href="{% url 'potensi_desa_index' %}" class="back-link">Kembali ke Daftar Potensi</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,211 +1,538 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Beranda Desa Kita{% endblock %}
+{% block title %}Beranda - Desa Boyemare{% endblock %}
 
-{% block content %}
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <style>
-    /* --- Gaya untuk Halaman Daftar Berita (home.html atau artikel_list.html) --- */
-
-    /* Penting: Beberapa gaya dasar (body, h1, h2, dll.) mungkin sudah ada di base.html atau CSS lain. */
-    /* Pastikan tidak ada konflik atau duplikasi yang tidak diinginkan. */
-
-    .homepage-content-wrapper {
-        padding: 40px 20px; /* Padding global untuk konten utama */
-        background-color: #f0f2f5; /* Latar belakang lembut untuk halaman beranda */
-    }
-
-    .articles-section-container {
-        max-width: 1200px; /* Lebar maksimal kontainer daftar artikel */
-        margin: 0 auto; /* Pusatkan di tengah */
+    /*
+    ========================================
+    CSS Umum untuk Tata Letak Bagian Konten
+    ========================================
+    */
+    .content-section {
+        padding: 40px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
     }
 
     .section-title {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 2.5em;
-        color: #2c3e50;
-        text-align: center;
+        font-size: 2.5rem;
+        color: #388E3C; /* Warna hijau gelap untuk judul */
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .section-title::after { /* Garis bawah dekoratif untuk judul bagian */
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background-color: #5cb85c; /* Warna hijau primer */
+        border-radius: 2px;
+    }
+
+    .section-description {
+        font-size: 1.1rem;
+        color: #666;
         margin-bottom: 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Hapus atau nonaktifkan ini jika Anda menggunakan Swiper */
-    /* .articles-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-    } */
-
-    /* Penting: Pastikan .swiper-slide memiliki tinggi yang cukup atau disesuaikan */
-    .swiper-slide {
-        height: auto; /* Memungkinkan konten di dalamnya menentukan tinggi */
-        display: flex; /* Gunakan flexbox agar kartu mengisi slide */
-        align-items: stretch; /* Agar semua kartu memiliki tinggi yang sama di satu baris */
+    /*
+    ========================================
+    CSS Khusus untuk Bagian Artikel/Berita
+    ========================================
+    */
+    .articles-section-container {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+        padding: 30px;
+        position: relative; /* Penting untuk penempatan tombol navigasi Swiper jika di dalam container ini */
     }
 
-    .article-summary-card {
-        background-color: #ffffff; /* Latar belakang putih untuk setiap kartu */
+    /* FILTER SECTION STYLING (Untuk Artikel) - INI KUNCI UNTUK KIRI & KANAN */
+    .filter-section {
+        display: flex;
+        /* Ini yang membuat elemen paling kiri menempel kiri, dan paling kanan menempel kanan */
+        justify-content: space-between;
+        align-items: center; /* Memastikan vertikal align */
+        margin-bottom: 30px;
+        gap: 15px; /* Jarak antar item jika flex-wrap diaktifkan dan ada lebih dari 2 item */
+        flex-wrap: wrap; /* Agar elemen bisa wrap di layar kecil */
+    }
+
+    /* Group untuk filter dropdown */
+    .filter-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Jarak antara label dan select */
+        flex-wrap: wrap;
+    }
+
+    .filter-section label {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .filter-section select { /* Gaya untuk dropdown filter */
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: #333;
+        background-color: #fff;
+        appearance: none; /* Menghilangkan gaya default browser */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        /* Menambahkan ikon panah kustom */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        cursor: pointer;
+    }
+
+    .filter-section select:focus {
+        border-color: #5cb85c;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.2);
+    }
+
+    /* CSS untuk tombol "Lihat Semua Berita" yang inline dengan filter */
+    .btn-view-more-inline {
+        display: inline-block;
+        background-color: #007bff; /* Warna biru */
+        color: white;
+        padding: 10px 20px; /* Ukuran yang proporsional */
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+        white-space: nowrap; /* Mencegah tombol putus baris */
+    }
+
+    .btn-view-more-inline:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    /*
+    ========================================
+    Gaya Swiper (PENTING untuk Carousel)
+    ========================================
+    */
+    .swiper { /* Kontainer utama Swiper */
+        width: 100%;
+        padding-bottom: 50px; /* Ruang untuk pagination dots di bawah */
+        padding-top: 10px;
+    }
+
+    .swiper-slide { /* Setiap item dalam carousel (kartu artikel) */
+        display: flex;
+        justify-content: center;
+        align-items: stretch; /* Membuat tinggi kartu seragam */
+        height: auto;
+        box-sizing: border-box;
+    }
+
+    .article-summary-card { /* Gaya untuk setiap kartu ringkasan artikel */
+        background-color: #fff;
         border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* Bayangan lembut */
-        padding: 25px;
-        /* margin-bottom: 30px; DIHAPUS jika menggunakan grid gap */
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        overflow: hidden; /* Pastikan tidak ada konten yang meluap */
-        display: flex; /* Menggunakan flexbox untuk tata letak internal kartu */
-        flex-direction: column; /* Konten vertikal */
-        width: 100%; /* Pastikan kartu mengisi lebar slide */
-        height: 100%; /* Pastikan kartu mengisi tinggi slide */
+        height: auto;
+        min-height: 400px; /* Tinggi minimal kartu agar konten dan footer pas */
+        overflow: hidden; /* Penting untuk efek border-radius */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column; /* Mengatur konten secara vertikal */
+        justify-content: space-between; /* Mendorong footer ke bawah */
+        width: 100%;
     }
 
     .article-summary-card:hover {
-        transform: translateY(-5px); /* Efek angkat saat hover */
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12); /* Bayangan lebih gelap saat hover */
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
-    .summary-title {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 1.8em;
-        color: #2c3e50;
-        margin-bottom: 15px;
-        line-height: 1.3;
-        flex-grow: 1; /* Agar judul mengambil ruang vertikal yang tersedia */
-    }
-
+    /* Gambar di dalam kartu: PENTING untuk tampilan rasio 16:9 */
     .summary-image {
         width: 100%;
-        height: 250px; /* Tinggi tetap untuk gambar */
-        object-fit: cover; /* Pastikan gambar mengisi area dengan baik */
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    .summary-content {
-        flex-grow: 1; /* Konten ringkasan mengambil sisa ruang vertikal */
-    }
-
-    .summary-content p {
-        font-family: 'Roboto', sans-serif;
-        font-size: 1em;
-        color: #555;
-        line-height: 1.7;
-        margin-bottom: 20px;
-        /* text-align: justify; */ /* Opsional: jika ingin ringkasan rata kiri-kanan */
-    }
-
-    .summary-footer {
-        display: flex;
-        justify-content: space-between; /* Untuk menempatkan tombol di kiri dan tanggal di kanan */
+        height: 0;
+        padding-top: 56.25%; /* Rasio 16:9 (9/16 = 0.5625) untuk menjaga aspek rasio */
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid #eee;
+        flex-shrink: 0; /* Mencegah gambar menyusut */
+        background-color: #f0f0f0; /* Latar belakang placeholder */
+        display: flex; /* Untuk memposisikan placeholder teks "Tidak Ada Gambar" */
+        justify-content: center;
         align-items: center;
-        padding-top: 15px;
-        border-top: 1px solid #eee; /* Garis pemisah */
-        margin-top: auto; /* Dorong footer ke bawah kartu */
+        font-size: 1rem;
+        color: #888;
+        text-align: center;
     }
 
-    /* Gaya untuk tombol "Baca Selengkapnya" */
-    .btn-read-more {
-        display: inline-block; /* Agar bisa menerapkan padding dan margin */
-        background-color: #2ecc71; /* Warna hijau cerah */
+    .summary-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ini yang akan memotong dan mengisi gambar ke dalam kotak */
+        object-position: center;
+        display: block;
+    }
+
+    .no-image-placeholder {
+        font-weight: bold;
+        color: #aaa;
+    }
+
+    .summary-title { /* Gaya untuk judul artikel */
+        font-size: 1.5rem;
+        color: #333;
+        margin: 15px 15px 5px 15px;
+        text-align: left;
+        flex-grow: 0;
+        display: -webkit-box; /* Untuk membatasi jumlah baris teks */
+        -webkit-line-clamp: 2; /* Maksimal 2 baris untuk judul */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 2.5em; /* Tinggi minimal untuk konsistensi 2 baris */
+    }
+
+    .summary-content { /* Konten ringkasan artikel */
+        padding: 0 15px;
+        text-align: left;
+        flex-grow: 1; /* Agar mengambil ruang yang tersisa */
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    .summary-content .excerpt { /* Potongan teks ringkasan */
+        font-size: 0.95rem;
+        color: #555;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Tampilkan maksimal 3 baris */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 4.8em; /* Tinggi minimal untuk konsistensi 3 baris */
+    }
+
+    .summary-footer { /* Footer setiap kartu (tanggal & tombol) */
+        padding: 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto; /* Mendorong footer ke bagian paling bawah kartu */
+        flex-shrink: 0; /* Mencegah footer menyusut */
+        background-color: #fefefe;
+    }
+
+    .btn-read-more { /* Tombol "Baca Selengkapnya" */
+        display: inline-block;
+        background-color: #5cb85c;
         color: white;
-        padding: 10px 20px;
-        border-radius: 6px; /* Sudut membulat */
-        text-decoration: none; /* Hapus garis bawah */
-        font-weight: 600;
-        font-size: 0.95em;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3); /* Bayangan untuk tombol */
+        padding: 6px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        transition: background-color 0.3s ease;
     }
 
     .btn-read-more:hover {
-        background-color: #27ae60; /* Warna hijau lebih gelap saat hover */
-        transform: translateY(-2px); /* Efek angkat sedikit */
+        background-color: #4cae4c;
     }
 
-    .published-date {
-        font-size: 0.85em;
-        color: #999;
+    .article-date { /* Teks tanggal artikel */
+        font-size: 0.8rem;
+        color: #888;
+        margin: 0;
+        white-space: nowrap; /* Mencegah tanggal putus baris */
     }
 
-    .no-articles {
-        text-align: center;
-        font-size: 1.2em;
+    .no-articles { /* Pesan jika tidak ada artikel */
+        font-style: italic;
         color: #777;
-        padding: 50px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        margin-top: 30px;
+        margin-top: 20px;
+        font-size: 1.1rem;
+        text-align: center;
     }
 
-    /* Gaya untuk panah navigasi Swiper */
-    .swiper-button-next,
+    /*
+    ========================================
+    Gaya Navigasi & Paginasi Swiper
+    ========================================
+    */
+    .swiper-button-next, /* Tombol navigasi "Berikutnya" */
+    .swiper-button-prev { /* Tombol navigasi "Sebelumnya" */
+        color: #388E3C !important; /* Warna panah hijau tua */
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10; /* Memastikan tombol di atas slide */
+        width: var(--swiper-navigation-size, 44px); /* Menggunakan variabel Swiper untuk ukuran */
+        height: var(--swiper-navigation-size, 44px);
+    }
+    .swiper-button-next::after, /* Mengatur ukuran ikon panah */
+    .swiper-button-prev::after {
+        font-size: 24px !important;
+    }
+
     .swiper-button-prev {
-        color: #3498db; /* Warna panah */
+        left: 0px; /* Posisikan lebih ke tepi kiri */
     }
 
-    .swiper-pagination-bullet-active {
-        background: #2ecc71; /* Warna titik aktif pagination */
-    }
-
-    /* Anda mungkin perlu menyesuaikan posisi panah navigasi jika terganggu */
-    .swiper-container { /* atau .mySwiper */
-        padding-left: 50px; /* Ruang untuk tombol prev */
-        padding-right: 50px; /* Ruang untuk tombol next */
-    }
-    .swiper-button-prev {
-        left: 0;
-    }
     .swiper-button-next {
-        right: 0;
+        right: 0px; /* Posisikan lebih ke tepi kanan */
     }
 
+    /* Media query untuk menyembunyikan/menyesuaikan panah di mobile */
+    @media (max-width: 480px) {
+        .swiper-button-next,
+        .swiper-button-prev {
+            /* display: none !important; */ /* Uncomment ini jika Anda ingin menyembunyikan panah di mobile */
+            font-size: 18px !important; /* Kecilkan panah di mobile */
+            width: 30px;
+            height: 30px;
+        }
+    }
 
-    /* Media Queries untuk Responsif */
-    @media (max-width: 768px) {
-        .articles-grid { /* Jika Anda tetap menggunakan grid untuk non-swiper */
-            grid-template-columns: 1fr; /* Satu kolom di layar kecil */
+    .swiper-pagination-bullet-active { /* Gaya titik paginasi yang aktif */
+        background-color: #388E3C !important; /* Warna titik paginasi hijau */
+    }
+
+    /*
+    ========================================
+    Gaya Bagian "Program Unggulan" (Grid Biasa)
+    ========================================
+    */
+    .other-section-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        margin-top: 40px;
+    }
+
+    .program-cards-grid { /* Grid untuk kartu program */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Kolom responsif */
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .program-card { /* Gaya setiap kartu program */
+        background-color: #f0f8f0;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: left;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 180px; /* Tinggi minimal kartu program */
+    }
+
+    .program-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .program-card h3 {
+        color: #388E3C;
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .program-card p {
+        color: #555;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .program-card .small-button {
+        display: inline-block;
+        background-color: #5cb85c;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: background-color 0.3s ease;
+        align-self: flex-start;
+    }
+
+    .program-card .small-button:hover {
+        background-color: #4cae4c;
+    }
+
+    /*
+    ========================================
+    Penyesuaian Responsif (Media Queries)
+    ========================================
+    */
+    @media (max-width: 768px) { /* Untuk ukuran tablet */
+        .section-title {
+            font-size: 2rem;
+        }
+        .section-description {
+            font-size: 1rem;
+        }
+        .content-section {
+            padding: 30px 15px;
+        }
+        /* Swiper di tablet */
+        .swiper-slide {
+            width: calc((100% - 30px) / 2); /* 2 slide per tampilan */
         }
         .article-summary-card {
-            padding: 20px;
-        }
-        .summary-title {
-            font-size: 1.5em;
+            min-height: 380px;
         }
         .summary-image {
-            height: 200px;
+            padding-top: 56.25%; /* Rasio 16:9 tetap */
         }
-        .summary-footer {
-            flex-direction: column; /* Ubah tata letak jadi kolom di mobile */
-            align-items: flex-start;
+        .summary-title {
+            font-size: 1.3rem;
+            -webkit-line-clamp: 3;
+        }
+        .summary-content .excerpt {
+            -webkit-line-clamp: 4;
+        }
+        .program-card {
+            padding: 20px;
+        }
+        /* Penyesuaian filter dan tombol untuk tablet */
+        .filter-section {
+            flex-direction: column; /* Ubah ke kolom di layar kecil */
+            align-items: flex-start; /* Sejajarkan ke kiri */
+            gap: 20px; /* Beri jarak antar filter dan tombol */
+        }
+        .filter-controls {
+            justify-content: flex-start; /* Sejajarkan kontrol filter ke kiri */
+            width: 100%; /* Ambil lebar penuh */
+        }
+        .btn-view-more-inline {
+            width: 100%; /* Tombol ambil lebar penuh di mobile */
+            text-align: center;
+            padding: 12px 20px; /* Sedikit lebih besar untuk mobile */
+            font-size: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) { /* Untuk ukuran ponsel */
+        .section-title {
+            font-size: 1.8rem;
+        }
+        /* Swiper di mobile */
+        .swiper-slide {
+            width: 100%; /* 1 slide per tampilan untuk ponsel */
+        }
+        .article-summary-card {
+            min-height: 350px;
+        }
+        .summary-image {
+            padding-top: 56.25%; /* Rasio 16:9 tetap */
+        }
+        .summary-title {
+            font-size: 1.2rem;
+            -webkit-line-clamp: 3;
+        }
+        .summary-content .excerpt {
+            font-size: 0.9rem;
+            -webkit-line-clamp: 5;
         }
         .btn-read-more {
-            margin-bottom: 10px; /* Jarak antara tombol dan tanggal */
-            width: 100%; /* Tombol memenuhi lebar */
-            text-align: center;
+            padding: 5px 10px;
+            font-size: 0.75rem;
         }
-        .section-title {
-            font-size: 2em;
+        .article-date {
+            font-size: 0.75rem;
+        }
+        /* Penyesuaian filter dan tombol untuk ponsel (sama dengan tablet untuk kesederhanaan) */
+        .filter-section {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .filter-controls {
+            justify-content: flex-start;
+            width: 100%;
+        }
+        .btn-view-more-inline {
+            width: 100%;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 1rem;
         }
     }
 </style>
+{% endblock %}
 
-<main class="homepage-content-wrapper">
-    <div class="articles-section-container">
-        <h2 class="section-title">Berita & Informasi Terbaru Desa Andi </h2>
-        {% if articles %}
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
-                    {% for article in articles %}
-                        <div class="swiper-slide">
+{% block content %}
+    <div class="content-section articles-section-container">
+        <h2 class="section-title">Berita & Informasi Terbaru Desa Boyemare</h2>
+
+        {# BAGIAN FILTER WAKTU DAN TOMBOL "LIHAT SEMUA" YANG BERSEBELAHAN #}
+        <form method="get" action="{% url 'home' %}" class="filter-section">
+            <div class="filter-controls"> {# Wrapper untuk elemen filter waktu (akan berada di sisi KIRI) #}
+                <label for="time_filter">Tampilkan:</label>
+                <select name="time_period" id="time_filter" onchange="this.form.submit()">
+                    <option value="" {% if not selected_time_period %}selected{% endif %}>Semua Waktu</option>
+                    <option value="today" {% if selected_time_period == 'today' %}selected{% endif %}>Hari Ini</option>
+                    <option value="this_week" {% if selected_time_period == 'this_week' %}selected{% endif %}>Minggu Ini</option>
+                    <option value="this_month" {% if selected_time_period == 'this_month' %}selected{% endif %}>Bulan Ini</option>
+                    <option value="this_year" {% if selected_time_period == 'this_year' %}selected{% endif %}>Tahun Ini</option>
+                </select>
+            </div>
+            {# Tombol "Lihat Semua Berita" (akan berada di sisi KANAN) #}
+            <a href="{% url 'article_list' %}" class="btn-view-more-inline">Lihat Semua Berita <i class="fas fa-arrow-right"></i></a>
+        </form>
+
+        {% if articles %} {# Kondisi: Tampilkan carousel jika ada artikel #}
+            <div class="swiper mySwiper"> {# Kontainer utama SwiperJS, dengan class 'mySwiper' yang ditarget oleh JS #}
+                <div class="swiper-wrapper"> {# Wrapper untuk semua slide Swiper #}
+                    {% for article in articles %} {# Loop melalui setiap artikel yang dikirim dari views.py #}
+                        <div class="swiper-slide"> {# Setiap item artikel adalah sebuah slide #}
                             <div class="article-summary-card">
-                                <h3 class="summary-title">{{ article.title }}</h3>
-                                {% if article.gambar_utama %}
-                                    <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}" class="summary-image">
-                                {% endif %}
-                                <div class="summary-content">
-                                    <p class="excerpt">{{ article.content|truncatechars:250 }}</p>
+                                {# Link yang membungkus gambar dan judul untuk dapat diklik #}
+                                <a href="{% url 'article_detail' pk=article.id %}" style="text-decoration: none; color: inherit; display: block;">
+                                    <div class="summary-image"> {# Kontainer gambar artikel #}
+                                        {% if article.gambar_utama %} {# Cek apakah ada gambar utama #}
+                                            <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}"> {# Tampilkan gambar #}
+                                        {% else %}
+                                            <span class="no-image-placeholder">Tidak Ada Gambar</span> {# Tampilkan placeholder #}
+                                        {% endif %}
+                                    </div>
+                                    <h3 class="summary-title">{{ article.title }}</h3> {# Judul artikel #}
+                                </a>
+
+                                <div class="summary-content"> {# Konten ringkasan artikel #}
+                                    {# striptags: menghapus tag HTML dari konten; truncatechars: memotong teks #}
+                                    <p class="excerpt">{{ article.content|striptags|truncatechars:120 }}</p>
                                 </div>
-                                
+
+                                {# Footer kartu dengan tombol "Baca Selengkapnya" dan tanggal #}
                                 <div class="summary-footer">
-                                    <a href="{% url 'artikel_detail' pk=article.id %}" class="btn-read-more">Baca Selengkapnya</a>
-                                    <p class="published-date">Dipublikasikan pada: {{ article.created_at|date:"d M Y, H:i" }}</p>
+                                    <a href="{% url 'article_detail' pk=article.id %}" class="btn-read-more">Baca Selengkapnya</a>
+                                    <p class="article-date">{{ article.created_at|date:"d M Y" }}</p> {# Tanggal artikel #}
                                 </div>
                             </div>
                         </div>
@@ -216,36 +543,77 @@
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
-        {% else %}
+        {% else %} {# Jika tidak ada artikel #}
             <p class="no-articles">Belum ada artikel atau berita terbaru yang tersedia.</p>
         {% endif %}
     </div>
-</main>
 
+    {# Bagian Program Unggulan Desa #}
+    <div class="content-section other-section-container">
+        <h2 class="section-title">Program Unggulan Desa</h2>
+        <div class="program-cards-grid">
+            <div class="program-card">
+                <h3>Program Bantuan Sosial</h3>
+                <p>Penyaluran bantuan sosial tepat sasaran untuk meningkatkan kesejahteraan warga yang membutuhkan.</p>
+                <a href="#" class="small-button">Detail Program</a>
+            </div>
+            <div class="program-card">
+                <h3>Peningkatan Infrastruktur</h3>
+                <p>Fokus pada pembangunan jalan, irigasi, dan fasilitas umum untuk mendukung aktivitas warga.</p>
+                <a href="#" class="small-button">Detail Program</a>
+            </div>
+            <div class="program-card">
+                <h3>Pengembangan Desa Wisata</h3>
+                <p>Meningkatkan potensi wisata alam dan budaya desa untuk menarik pengunjung dan meningkatkan pendapatan.</p>
+                <a href="#" class="small-button">Detail Program</a>
+            </div>
+            {# Tambahkan program lain di sini jika ada #}
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %} {# Blok ini untuk JavaScript tambahan yang spesifik untuk halaman ini #}
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
-    // Initialize Swiper
-    var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 1, // Default: 1 slide per view
-        spaceBetween: 30, // Jarak antar slide
-        loop: true, // Untuk mengulang dari awal setelah slide terakhir
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-        },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
-        breakpoints: {
-            // Ketika lebar layar >= 768px
-            768: {
-                slidesPerView: 2, // Tampilkan 2 slide
+    // Event listener untuk memastikan DOM sudah dimuat sebelum menjalankan script
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi SwiperJS
+        var swiper = new Swiper(".mySwiper", { // Target elemen dengan class "mySwiper"
+            slidesPerView: 1, // Menampilkan 1 slide per tampilan secara default (untuk mobile)
+            spaceBetween: 30, // Jarak antar slide
+            loop: true, // Mengaktifkan loop tak terbatas
+            autoplay: { // Konfigurasi autoplay
+                delay: 3000, // Ganti slide setiap 3 detik
+                disableOnInteraction: false, // Lanjutkan autoplay setelah interaksi manual
+                pauseOnMouseEnter: true, // Jeda autoplay saat kursor di atas swiper
             },
-            // Ketika lebar layar >= 1024px
-            1024: {
-                slidesPerView: 3, // Tampilkan 3 slide
+            pagination: { // Konfigurasi pagination (titik-titik di bawah)
+                el: ".swiper-pagination", // Elemen yang akan menjadi pagination
+                clickable: true, // Pagination bisa diklik
             },
-        },
+            navigation: { // Konfigurasi tombol navigasi (panah kiri/kanan)
+                nextEl: ".swiper-button-next", // Elemen tombol 'Berikutnya'
+                prevEl: ".swiper-button-prev", // Elemen tombol 'Sebelumnya'
+            },
+            breakpoints: { // Konfigurasi responsif untuk tampilan yang berbeda
+                768: { // Untuk lebar layar 768px ke atas
+                    slidesPerView: 2, // Tampilkan 2 slide
+                },
+                1024: { // Untuk lebar layar 1024px ke atas
+                    slidesPerView: 3, // Tampilkan 3 slide
+                },
+            },
+            observer: true, // Mengaktifkan observer untuk perubahan DOM (membantu jika konten dimuat secara dinamis)
+            observeParents: true, // Observer juga akan memantau perubahan pada parent elemen Swiper
+            on: { // Event listener Swiper
+                init: function() {
+                    this.update(); // Memastikan Swiper mengupdate layout setelah inisialisasi
+                },
+                resize: function() {
+                    this.update(); // Memastikan Swiper mengupdate layout saat ukuran jendela berubah
+                }
+            }
+        });
     });
 </script>
 {% endblock %}

@@ -178,3 +178,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # DEFAULT_AUTO_FIELD: Tipe field primary key default untuk model yang tidak menentukan pk secara eksplisit.
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# your_project/settings.py
+USE_TZ = True # Ini penting untuk filtering tanggal/waktu yang akurat
+TIME_ZONE = 'Asia/Makassar' # Atau 'Asia/Jakarta', 'Asia/Jayapura' sesuai lokasi WITA
