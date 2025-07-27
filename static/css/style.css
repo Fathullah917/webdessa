@@ -3,9 +3,11 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f6; /* Warna latar belakang umum */
-    color: #333;
+    /* Latar belakang abu-abu terang untuk seluruh body. Gambar latar belakang dipindahkan ke .hero-section */
+    background-color: #caffd4; /*latar belakang di bawah bg*/
+    color: #ca3f3f;
     line-height: 1.6;
+    overflow-x: hidden; /* Mencegah scroll horizontal yang tidak diinginkan */
 }
 
 .container {
@@ -16,7 +18,7 @@ body {
 
 /* Header Styles */
 .site-header {
-    background-color: #388E3C; /* Warna hijau khas Desa Boyemare */
+    background-color: #09640d; /* Warna hijau khas Desa Boyemare */
     color: white;
     padding: 15px 20px;
     display: flex;
@@ -25,7 +27,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .header-left {
@@ -62,41 +64,43 @@ body {
     display: flex;
     gap: 25px; /* Jarak antar item navigasi */
     align-items: center;
+    list-style: none; /* Menghilangkan bullet point dari ul */
+    margin: 0;
+    padding: 0;
 }
 
 .nav-item {
+    position: relative;
+}
+
+.nav-item a { /* Gaya untuk semua link navigasi */
     color: white;
     text-decoration: none;
     font-weight: 500;
     padding: 5px 0;
-    position: relative;
     transition: color 0.3s ease;
+    display: flex; /* Untuk ikon dan teks sejajar */
+    align-items: center;
 }
 
-.nav-item:hover {
+.nav-item a:hover {
     color: #FFEB3B; /* Warna kuning saat hover */
 }
 
+.nav-item a i { /* Gaya untuk ikon di navigasi */
+    margin-right: 8px;
+}
+
+
 /* Dropdown Menu */
 .nav-item.dropdown {
-    list-style: none; /* Menghilangkan bullet point dari li */
-    position: relative;
-    padding: 0; /* Reset padding default li */
+    list-style: none; /*(Sudah diatur di #main-nav) */
+    position: relative;/* (Sudah diatur di .nav-item) */
+    padding: 0; /*(Sudah diatur di #main-nav) */
 }
 
 .nav-item.dropdown .nav-link {
-    display: flex;
-    align-items: center;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 5px 0;
     cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.nav-item.dropdown .nav-link:hover {
-    color: #FFEB3B;
 }
 
 .nav-item.dropdown .nav-link i.fa-caret-down {
@@ -114,28 +118,37 @@ body {
     position: absolute;
     background-color: #388E3C; /* Latar belakang dropdown sama dengan header */
     min-width: 180px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3);
     z-index: 1;
     padding: 10px 0;
     border-radius: 5px;
     opacity: 0;
-    transition: opacity 0.3s ease, display 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Menggunakan visibility untuk transisi display */
     top: calc(100% + 10px); /* Jarak dari parent link */
     left: 0;
     transform-origin: top;
+    visibility: hidden; /* Sembunyikan secara visual */
+}
+
+/* Display dropdown on hover for desktop */
+.nav-item.dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    visibility: visible;
 }
 
 .dropdown-content a {
     color: white;
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
+    display: flex; /* Menggunakan flex untuk ikon dan teks */
+    align-items: center;
     white-space: nowrap;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dropdown-content a:hover {
-    background-color: #4CAF50; /* Warna hijau sedikit lebih terang saat hover */
+    background-color: #3e7840; /* Warna hijau sedikit lebih terang saat hover */
     color: #FFEB3B;
 }
 
@@ -157,77 +170,114 @@ body {
 
 /* Hero Section */
 .hero-section {
-    position: relative;
-    height: 450px; /* Tinggi hero section */
-    background-image: url('{% static "img/background-hero.jpg" %}'); /* Ganti dengan gambar latar belakang hero Anda */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    overflow: hidden; /* Pastikan konten tidak meluber */
+    position: relative; /* Menjadikan elemen ini sebagai referensi posisi untuk elemen anak yang diposisikan absolut. */
+    height: 450px; /* Mengatur tinggi tetap dari hero section. Perlu dipertimbangkan untuk responsivitas. */
+    /* Gambar latar belakang untuk hero section saja */
+    background-image: url('../img/bg.jpg'); /* Menetapkan gambar 'bg.jpg' sebagai latar belakang. Path relatif dari lokasi file CSS ini. */
+    background-size: cover; /* Memastikan gambar mencakup seluruh area elemen, memotong jika perlu, tanpa distorsi. */
+    background-position: center; /* Menempatkan gambar latar belakang di tengah elemen. */
+    background-repeat: no-repeat; /* Mencegah gambar latar belakang diulang. */
+    background-attachment: scroll; /* Gambar latar belakang akan menggulir bersama halaman. */
+    display: flex; /* Mengubah elemen ini menjadi kontainer flexbox untuk mengatur konten di dalamnya. */
+    align-items: center; /* Menyenterkan konten flexbox secara vertikal (di sepanjang sumbu silang). */
+    justify-content: center; /* Menyenterkan konten flexbox secara horizontal (di sepanjang sumbu utama). */
+    color: rgb(255, 255, 255); /* Mengatur warna teks di dalam hero section menjadi putih. */
+    text-align: center; /* Menyenterkan teks inline atau konten inline-block di dalam elemen. */
+    overflow: hidden; /* Memotong konten yang meluber keluar dari batas elemen. */
 }
 
 .hero-content-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px; /* Jarak antara welcome-box dan person-box */
-    position: relative;
-    z-index: 2; /* Agar di atas overlay jika ada */
+    display: flex; /* Mengubah elemen ini menjadi kontainer flexbox untuk welcome-box dan person-box. */
+    justify-content: center; /* Menyenterkan welcome-box dan person-box secara horizontal. */
+    align-items: center; /* Menyenterkan welcome-box dan person-box secara vertikal. */
+    gap: 700px; /* Menetapkan jarak (gutter) antara welcome-box dan person-box. CATATAN: 600px SANGAT BESAR, bisa menyebabkan masalah tata letak di layar kecil. */
+    position: relative; /* Menjadikan elemen ini sebagai referensi posisi untuk elemen anak yang diposisikan absolut. */
+    z-index: 2; /* Mengatur urutan tumpukan; elemen ini akan berada di atas elemen dengan z-index lebih rendah. */
 }
 
-.welcome-box, .person-box {
-    background-color: rgba(0, 0, 0, 0.6); /* Latar belakang gelap transparan */
-    padding: 25px 40px;
-    border-radius: 10px;
-    text-align: left; /* Teks welcome-box rata kiri */
-    backdrop-filter: blur(5px); /* Efek blur pada latar belakang transparan */
+/*.welcome-box, .person-box { /* Gaya yang diterapkan pada kedua kotak (welcome dan person). */
+    /*background-color: rgba(0, 0, 0, 0.6);  Contoh: Latar belakang gelap transparan (saat ini dikomentari). */
+    /*padding: 25px 40px; /* Menambahkan ruang internal (padding) di dalam kotak. */
+    /*border-radius: 10px; /* Membuat sudut kotak melengkung. */
+    /* backdrop-filter: blur(5px); Contoh: Efek blur pada latar belakang transparan (saat ini dikomentari). */
+    /*box-shadow: 0 4px 15px rgba(6, 6, 6, 0.2); /* Menambahkan bayangan ke kotak (offset-x, offset-y, blur-radius, warna). */
+
+
+.welcome-box {
+    text-align: left; /* Mengatur teks di dalam welcome-box agar rata kiri. */
 }
 
 .welcome-box h2 {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-    font-weight: 500;
+    font-size: 1.2em; /* Mengatur ukuran font h2 (1.2 kali ukuran font induk). */
+    margin-bottom: 5px; /* Menambahkan margin bawah 5px pada h2. */
+    font-weight: 500; /* Mengatur ketebalan font h2 (semi-bold). */
+    /* Menambahkan bayangan teks berlapis untuk efek 3D */
+    text-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 0.3),   /* Bayangan pertama, sedikit offset, tanpa blur */
+        2px 2px 0px rgba(0, 0, 0, 0.2),   /* Bayangan kedua, offset lebih jauh */
+        3px 3px 0px rgba(0, 0, 0, 0.1),   /* Bayangan ketiga, paling jauh */
+        4px 4px 8px rgba(0, 0, 0, 0.5);   /* Bayangan terakhir untuk blur dan kedalaman */
+
 }
 
 .welcome-box h1 {
-    font-size: 3em;
-    margin-top: 0;
-    margin-bottom: 0;
-    font-weight: 700;
+    font-size: 3em; /* Mengatur ukuran font h1 (3 kali ukuran font induk). */
+    margin-top: 0; /* Menghilangkan margin atas default h1. */
+    margin-bottom: 0; /* Menghilangkan margin bawah default h1. */
+    font-weight: 700; /* Mengatur ketebalan font h1 (bold). */
+    /* Menambahkan bayangan teks berlapis untuk efek 3D */
+    text-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 0.3),   /* Bayangan pertama, sedikit offset, tanpa blur */
+        2px 2px 0px rgba(0, 0, 0, 0.2),   /* Bayangan kedua, offset lebih jauh */
+        3px 3px 0px rgba(0, 0, 0, 0.1),   /* Bayangan ketiga, paling jauh */
+        4px 4px 8px rgba(0, 0, 0, 0.5);   /* Bayangan terakhir untuk blur dan kedalaman */
 }
 
 .person-box {
-    text-align: center;
+    text-align: center; /* Menyenterkan teks dan konten di dalam person-box. */
 }
 
 .person-box img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid white;
-    margin-bottom: 10px;
-}
-
+    width: 200px; /* Mengatur lebar gambar profil. */
+    height: 200px; /* Mengatur tinggi gambar profil. */
+    /*border-radius: 50%; /* Membuat gambar menjadi lingkaran sempurna. */
+    /*object-fit: cover; /* Memastikan gambar mengisi area 120x120px tanpa distorsi, memotong jika perlu. */
+    /*border: 4px solid white; /* Menambahkan bingkai putih di sekitar gambar. */
+    /*margin-bottom: 1px; /* Menambahkan margin bawah 10px pada gambar. */
+    /*box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);*/
+}       
 .person-box h3 {
-    margin: 5px 0;
-    font-size: 1.1em;
-    font-weight: 700;
+    margin: 0px 0; /* Mengatur margin atas/bawah 5px, kiri/kanan 0 pada h3. */
+    font-size: 1.1em; /* Mengatur ukuran font h3. */
+    font-weight: 700; /* Mengatur ketebalan font h3 (bold). */
+     text-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 0.3),   /* Bayangan pertama, sedikit offset, tanpa blur */
+        2px 2px 0px rgba(0, 0, 0, 0.2),   /* Bayangan kedua, offset lebih jauh */
+        3px 3px 0px rgba(0, 0, 0, 0.1),   /* Bayangan ketiga, paling jauh */
+        4px 4px 8px rgba(0, 0, 0, 0.5);   /* Bayangan terakhir untuk blur dan kedalaman */
+
 }
 
 .person-box p {
-    margin: 0;
-    font-size: 0.9em;
-    opacity: 0.8;
+    margin: 0; /* Menghilangkan margin default pada paragraf. */
+    font-size: 0.9em; /* Mengatur ukuran font paragraf (sedikit lebih kecil dari induk). */
+    opacity: 0.8; /* Membuat teks sedikit transparan (80% opasitas). */
+     text-shadow: 
+        1px 1px 0px rgba(0, 0, 0, 0.3),   /* Bayangan pertama, sedikit offset, tanpa blur */
+        2px 2px 0px rgba(0, 0, 0, 0.2),   /* Bayangan kedua, offset lebih jauh */
+        3px 3px 0px rgba(0, 0, 0, 0.1),   /* Bayangan ketiga, paling jauh */
+        4px 4px 8px rgba(0, 0, 0, 0.5);   /* Bayangan terakhir untuk blur dan kedalaman */
+
 }
 
 /* Main Content Wrapper */
+main {
+    /* Tidak perlu padding-top di sini jika header sticky diatur dengan baik */
+}
+
 .content-wrapper.container {
     padding: 40px 20px; /* Padding untuk keseluruhan konten utama */
+    min-height: 400px; /* Agar ada ruang jika konten sedikit */
 }
 
 /* Section Styles (for separation) */
@@ -236,7 +286,7 @@ body {
     padding: 40px;
     margin-bottom: 30px; /* Jarak antar bagian */
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .section-title {
@@ -258,10 +308,8 @@ body {
     border-radius: 2px;
 }
 
-/* Berita & Informasi Terbaru Section */
-.articles-section-container {
-    /* Sudah ada style dasar di .content-section */
-}
+/* Berita & Informasi Terbaru Section (Swiper Carousel) */
+/* .articles-section-container { sudah diatur oleh .content-section } */
 
 .no-articles {
     text-align: center;
@@ -280,7 +328,7 @@ body {
 .swiper-slide {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* Agar tinggi card sama */
 }
 
 .article-summary-card {
@@ -288,7 +336,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -298,7 +346,7 @@ body {
 
 .article-summary-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .summary-image {
@@ -357,8 +405,154 @@ body {
     margin: 0;
 }
 
-/* Swiper Navigation and Pagination */
-.swiper-button-next, .swiper-button-prev {
+/* --- Profil Detail Pages Styles --- */
+.profil-detail-section {
+    padding: 40px 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profil-detail-section .page-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2c3e50; /* Darker blue/grey */
+    font-size: 2.8em;
+    font-weight: 700;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 15px;
+    display: inline-block;
+    width: 100%;
+}
+
+.profil-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profil-card h2 {
+    color: #3498db; /* Blue accent */
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    border-bottom: 1px dashed #c0c0c0;
+    padding-bottom: 10px;
+}
+
+.profil-card h3 {
+    color: #2c3e50;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.profil-card p {
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.profil-card ul {
+    list-style-type: disc;
+    margin-left: 25px;
+    padding: 0;
+    color: #555;
+}
+
+.profil-card ul li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.no-data-message {
+    text-align: center;
+    color: #e74c3c; /* Red for warning */
+    font-style: italic;
+    padding: 20px;
+    border: 1px dashed #e74c3c;
+    border-radius: 5px;
+    margin: 30px 0;
+}
+
+/* --- Pejabat Grid Styles --- */
+.pejabat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+    justify-content: center; /* Center items if they don't fill the row */
+}
+
+.pejabat-card {
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pejabat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.pejabat-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 4px solid #3498db;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pejabat-card h3 {
+    margin: 10px 0 5px;
+    color: #2c3e50;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.pejabat-card p.jabatan {
+    color: #3498db;
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.pejabat-card p.periode,
+.pejabat-card p.kontak {
+    color: #7f8c8d;
+    font-size: 0.95em;
+    margin-bottom: 3px;
+}
+
+/* Responsive adjustments for profil/pejabat pages */
+@media (max-width: 768px) {
+    .profil-detail-section {
+        padding: 20px 15px;
+    }
+
+    .profil-detail-section .page-title {
+        font-size: 2em;
+    }
+
+    .pejabat-grid {
+        grid-template-columns: 1fr; /* Stack on smaller screens */
+    }
+}
+
+/* Swiper Navigation and Pagination (global for all Swiper instances) */
+.swiper-button-next,
+.swiper-button-prev {
     color: #388E3C !important;
 }
 
@@ -368,7 +562,7 @@ body {
 
 /* Potensi Desa Section */
 .potential-section-container {
-    /* Sudah diatur oleh .content-section */
+    /* Style dasar sudah diatur oleh .content-section */
     text-align: center; /* Untuk section description */
 }
 
@@ -394,7 +588,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -403,7 +597,7 @@ body {
 
 .potensi-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .potensi-image {
@@ -479,7 +673,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 25px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
@@ -489,7 +683,7 @@ body {
 
 .program-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .program-card h3 {
@@ -569,12 +763,14 @@ body {
 
 .social-links {
     margin-top: 20px;
+    display: flex; /* Untuk menata ikon sosial */
+    gap: 15px; /* Jarak antar ikon sosial */
 }
 
 .social-links a {
     color: white;
     font-size: 1.5em;
-    margin-right: 15px;
+    /* margin-right: 15px; (sudah diganti gap) */
     transition: color 0.3s ease;
 }
 
@@ -584,7 +780,9 @@ body {
 
 .footer-map iframe {
     border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    width: 100%; /* Pastikan iframe mengisi lebar container */
+    height: 250px; /* Tinggi iframe default */
 }
 
 .map-note {
@@ -632,17 +830,55 @@ body {
     font-size: 1.1em;
     display: flex;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Tambah transform untuk hover */
 }
 
 .whatsapp-float-button a:hover {
     background-color: #1DA851;
+    transform: scale(1.05); /* Efek zoom saat hover */
 }
 
 .whatsapp-float-button i {
     font-size: 1.5em;
     margin-right: 10px;
+}
+
+/* Message Styles (for Django messages) */
+.messages-container {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 
 /* Responsive Design (Mobile First, then adjust) */
@@ -655,7 +891,7 @@ body {
         top: 70px; /* Di bawah header */
         left: 0;
         background-color: #388E3C;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         padding: 20px;
         gap: 15px;
         align-items: flex-start; /* Item rata kiri */
@@ -679,9 +915,12 @@ body {
         position: static; /* Ubah posisi dropdown agar tidak tumpang tindih */
         width: 100%;
         box-shadow: none;
-        background-color: rgba(0,0,0,0.1); /* Sedikit transparan untuk visual */
+        background-color: rgba(0, 0, 0, 0.1); /* Sedikit transparan untuk visual */
         border-radius: 0;
         padding-left: 20px; /* Indentasi sub-menu */
+        visibility: visible; /* Selalu terlihat saat nav dibuka */
+        opacity: 1; /* Selalu opaq di mobile saat terbuka */
+        transition: none; /* Hapus transisi untuk mobile dropdown */
     }
 
     .nav-item.dropdown:hover .nav-link i.fa-caret-down {
@@ -693,9 +932,12 @@ body {
         gap: 20px;
     }
 
-    .welcome-box, .person-box {
+    .welcome-box,
+    .person-box {
         padding: 20px;
         text-align: center;
+        width: 90%; /* Memberikan lebar di mobile agar tidak terlalu lebar */
+        max-width: 400px; /* Batasi lebar maksimum */
     }
 
     .welcome-box h1 {
@@ -706,13 +948,26 @@ body {
         font-size: 1.8em;
     }
 
-    .potensi-grid, .program-cards-grid, .footer-grid {
+    .potensi-grid,
+    .program-cards-grid,
+    .footer-grid {
         grid-template-columns: 1fr; /* Satu kolom di layar kecil */
     }
 
     .article-summary-card {
         margin: 0 auto; /* Tengah artikel card jika hanya 1 kolom */
         max-width: 400px; /* Batasi lebar card di mobile */
+    }
+
+    .whatsapp-float-button {
+        bottom: 20px; /* Sesuaikan posisi mobile */
+        right: 20px;
+        font-size: 0.9em;
+        padding: 10px 15px;
+    }
+
+    .whatsapp-float-button i {
+        font-size: 1.3em;
     }
 }
 
@@ -731,5 +986,9 @@ body {
 
     .section-title {
         font-size: 1.6em;
+    }
+
+    .hero-section {
+        height: 350px; /* Kurangi tinggi hero di layar sangat kecil */
     }
 }

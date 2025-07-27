@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ judul_halaman }}{% endblock title %}
+
+{% block hero %}{% endblock %} {# Hapus hero section #}
+
+{% block content %}
+<section class="profil-detail-section">
+    <h1 class="page-title">{{ judul_halaman }}</h1>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if sarana_prasarana %}
+    <div class="profil-card">
+        <h2>Akses Jalan & Transportasi</h2>
+        <p>{{ sarana_prasarana.akses_jalan_utama|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Fasilitas Pendidikan</h2>
+        <p>{{ sarana_prasarana.fasilitas_pendidikan|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Layanan Kesehatan</h2>
+        <p>{{ sarana_prasarana.layanan_kesehatan|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Tempat Ibadah</h2>
+        <p>{{ sarana_prasarana.tempat_ibadah|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Jaringan Listrik & Air Bersih</h2>
+        <p>{{ sarana_prasarana.jaringan_listrik_air|linebreaksbr }}</p>
+    </div>
+
+    {% if sarana_prasarana.fasilitas_umum_lain %}
+    <div class="profil-card">
+        <h2>Fasilitas Umum Lainnya</h2>
+        <p>{{ sarana_prasarana.fasilitas_umum_lain|linebreaksbr }}</p>
+    </div>
+    {% endif %}
+
+    {% if sarana_prasarana.peta_embed_code %}
+    <div class="profil-card map-section">
+        <h2>Peta Lokasi Desa</h2>
+        {{ sarana_prasarana.peta_embed_code|safe }}
+        <p class="map-note"><a href="https://maps.app.goo.gl/YourDesaLocation" target="_blank">Lihat Peta Lebih Besar</a></p>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="no-data-message">Data Sarana dan Prasarana Umum belum tersedia. Harap lengkapi melalui halaman admin.</p>
+    {% endif %}
+
+</section>
+{% endblock content %}

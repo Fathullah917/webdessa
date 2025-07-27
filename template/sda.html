@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title_text }}{% endblock %}
+
+{% block extra_head %}
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<style>
+    /* Hero Section - Carousel */
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 500px; /* Adjust height as needed */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-swiper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .hero-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+        z-index: 1;
+    }
+
+    .hero-content-wrapper {
+        position: relative;
+        z-index: 2; /* Ensure text is above overlay */
+        padding: 20px;
+        max-width: 800px;
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    /* Swiper Navigation & Pagination */
+    .hero-swiper .swiper-button-next,
+    .hero-swiper .swiper-button-prev {
+        color: white !important;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        z-index: 3;
+    }
+
+    .hero-swiper .swiper-button-next::after,
+    .hero-swiper .swiper-button-prev::after {
+        font-size: 40px !important;
+    }
+
+    .hero-swiper .swiper-pagination-bullet-active {
+        background-color: white !important;
+    }
+
+    /* Main Content Styling */
+    .page-content {
+        padding: 40px 20px;
+        background-color: #f0f8f0; /* Light green background, consistent */
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #388E3C;
+        margin-bottom: 10px;
+    }
+
+    .section-header p {
+        font-size: 1.1rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Styling for Potensi Desa cards (consistent) */
+    .potensi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .potensi-card {
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        opacity: 0; /* Initial state for animation */
+    }
+
+    .potensi-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .potensi-card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .potensi-card-content {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .potensi-card-content h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .potensi-card-content p {
+        font-size: 0.95rem;
+        color: #666;
+        line-height: 1.6;
+        flex-grow: 1;
+    }
+
+    .potensi-card-footer {
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .potensi-card-footer .btn-detail {
+        background-color: #5cb85c;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .potensi-card-footer .btn-detail:hover {
+        background-color: #4CAF50;
+    }
+
+    /* Animation */
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Animation delay for each card */
+    {% for potensi in potensi_list %}
+    .potensi-card:nth-child({{ forloop.counter }}) {
+        animation-delay: {{ potensi.animation_delay }}s;
+        animation-fill-mode: both;
+    }
+    {% endfor %}
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            height: 350px;
+        }
+        .hero-text h1 {
+            font-size: 2.5rem;
+        }
+        .hero-text p {
+            font-size: 1rem;
+        }
+        .hero-swiper .swiper-button-next,
+        .hero-swiper .swiper-button-prev {
+            display: none !important;
+        }
+        .potensi-grid {
+            grid-template-columns: 1fr;
+        }
+        .potensi-card-image {
+            height: 180px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-section {
+            height: 250px;
+        }
+        .hero-text h1 {
+            font-size: 2rem;
+        }
+        .hero-text p {
+            font-size: 0.9rem;
+        }
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        .potensi-card-content h3 {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+{% endblock extra_head %}
+
+{% block hero %}
+<section class="hero-section">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ title_text }}</h1>
+            <p>{{ description_text }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    {# Carousel Gambar untuk Hero Section #}
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            {% for image in carousel_images %}
+            <div class="swiper-slide">
+                <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Gambar Carousel' }}">
+            </div>
+            {% endfor %}
+            {% if not carousel_images %}
+            <div class="swiper-slide">
+                <img src="{% static 'images/placeholder-sda-hero.jpg' %}" alt="Placeholder Image">
+            </div>
+            {% endif %}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% endblock hero %}
+
+{% block content %}
+<section class="page-content">
+    <div class="section-header">
+        <h2>Daftar Sumber Daya Alam</h2>
+        <p>Jelajahi berbagai kekayaan sumber daya alam yang dimiliki Desa Boyemare.</p>
+    </div>
+
+    <div class="potensi-grid">
+        {% for potensi in potensi_list %}
+        <div class="potensi-card" style="animation-delay: {{ potensi.animation_delay }}s;">
+            {% if potensi.gambar_utama %}
+                <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}" class="potensi-card-image">
+            {% else %}
+                <img src="{% static 'images/placeholder-sda-card.jpg' %}" alt="Gambar Placeholder" class="potensi-card-image">
+            {% endif %}
+            <div class="potensi-card-content">
+                <h3>{{ potensi.nama_potensi }}</h3>
+                <p>{{ potensi.deskripsi|truncatechars:150 }}</p>
+                <div class="potensi-card-footer">
+                    <a href="{% url 'potensi_detail' pk=potensi.id %}" class="btn-detail">Lihat Detail</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; grid-column: 1 / -1;">Belum ada data Sumber Daya Alam yang tersedia.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var heroSwiper = new Swiper(".hero-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            observer: true,
+            observeParents: true,
+            on: {
+                init: function() {
+                    this.update();
+                },
+                resize: function() {
+                    this.update();
+                }
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}

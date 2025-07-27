@@ -1,15 +1,117 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Daftar UMKM Desa Boyemare{% endblock %}
+{% block title %}{{ title_text }}{% endblock %}
 
-{% block hero %}{% endblock %}
-
-{% block content %}
-
+{% block extra_head %}
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <style>
-    /* --- UMKM Specific Styles for a Modern Look (INLINE CSS) --- */
+    /* Hero Section - Carousel */
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 500px; /* Adjust height as needed */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
 
+    .hero-swiper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .hero-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Dark overlay for text readability */
+        z-index: 1;
+    }
+
+    .hero-content-wrapper {
+        position: relative;
+        z-index: 2; /* Ensure text is above overlay */
+        padding: 20px;
+        max-width: 800px;
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    /* Swiper Navigation & Pagination */
+    .hero-swiper .swiper-button-next,
+    .hero-swiper .swiper-button-prev {
+        color: white !important;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        z-index: 3;
+    }
+
+    .hero-swiper .swiper-button-next::after,
+    .hero-swiper .swiper-button-prev::after {
+        font-size: 40px !important;
+    }
+
+    .hero-swiper .swiper-pagination-bullet-active {
+        background-color: white !important;
+    }
+
+    /* Main Content Styling */
+    .page-content {
+        padding: 40px 20px;
+        background-color: #f0f8f0; /* Light green background, consistent */
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #388E3C;
+        margin-bottom: 10px;
+    }
+
+    .section-header p {
+        font-size: 1.1rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* UMKM Specific Styles for a Modern Look */
     .umkm-list-container {
         padding: 50px 30px;
         max-width: 1000px;
@@ -63,12 +165,6 @@
         animation: slideInLeft 0.5s ease-out forwards;
         opacity: 0;
     }
-
-    {% for umkm in umkm_list %}
-    .umkm-card:nth-child({{ forloop.counter }}) {
-        animation-delay: {{ forloop.counter|mul:0.1 }}s;
-    }
-    {% endfor %}
 
     @keyframes slideInLeft {
         from { opacity: 0; transform: translateX(-30px); }
@@ -159,7 +255,7 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
-    /* Responsive Adjustments */
+    /* Responsive Adjustments for UMKM cards */
     @media (max-width: 768px) {
         .umkm-list-container {
             padding: 30px 20px;
@@ -218,47 +314,125 @@
         }
     }
 </style>
+{% endblock extra_head %}
 
-<div class="umkm-list-container">
-    <h2>Usaha Mikro, Kecil, dan Menengah (UMKM) Desa Kita</h2>
-    {% if umkm_list %}
-        {% for umkm in umkm_list %}
-            <div class="umkm-card">
-                <div class="logo">
-                    {% if umkm.gambar_produk %}
-                        <img src="{{ umkm.gambar_produk.url }}" alt="Gambar Produk {{ umkm.nama_umkm }}">
-                    {% elif umkm.logo_umkm %}
-                        <img src="{{ umkm.logo_umkm.url }}" alt="Logo {{ umkm.nama_umkm }}">
-                    {% else %}
-                        <img src="{% static 'img/default_umkm_logo.png' %}" alt="Logo Default">
-                    {% endif %}
-                </div>
-                <div class="info">
-                    <h3>{{ umkm.nama_umkm }}</h3>
-                    <p class="jenis-usaha">Jenis Usaha: <strong>{{ umkm.jenis_usaha }}</strong></p>
-                    {% if umkm.deskripsi %}
-                        <p class="deskripsi">{{ umkm.deskripsi|truncatechars:150 }}</p>
-                    {% endif %}
-                    <div class="details">
-                        <p><i class="fas fa-user"></i> Pemilik: {{ umkm.nama_pemilik }}</p>
-                        {% if umkm.no_telepon %}
-                            <p><i class="fas fa-phone"></i> Telepon/WA: <a href="tel:{{ umkm.no_telepon }}">{{ umkm.no_telepon }}</a></p>
-                        {% endif %}
-                        {% if umkm.link_medsos %}
-                            <p><i class="fas fa-link"></i> <a href="{{ umkm.link_medsos }}" target="_blank" rel="noopener noreferrer">Kunjungi Media Sosial</a></p>
-                        {% endif %}
-                        {% if umkm.alamat %}
-                            <p><i class="fas fa-map-marker-alt"></i> Alamat: {{ umkm.alamat }}</p>
-                        {% endif %}
-                        {% if umkm.tahun_berdiri %}
-                            <p><i class="fas fa-calendar-alt"></i> Berdiri Sejak: {{ umkm.tahun_berdiri }}</p>
+{% block hero %}
+<section class="hero-section">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ title_text }}</h1>
+            <p>{{ description_text }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+    {# Carousel Gambar untuk Hero Section #}
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            {% for image in carousel_images %}
+            <div class="swiper-slide">
+                <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Gambar Carousel' }}">
+            </div>
+            {% endfor %}
+            {% if not carousel_images %}
+            <div class="swiper-slide">
+                <img src="{% static 'images/placeholder-umkm-hero.jpg' %}" alt="Placeholder Image">
+            </div>
+            {% endif %}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% endblock hero %}
+
+{% block content %}
+<section class="page-content">
+    <div class="section-header">
+        <h2>Daftar Usaha Mikro, Kecil, dan Menengah (UMKM)</h2>
+        <p>Dukung produk lokal dan temukan beragam UMKM unggulan dari Desa Boyemare.</p>
+    </div>
+
+    <div class="umkm-list-container">
+        {% if potensi_list %} {# Menggunakan potensi_list dari PotensiDesa #}
+            {% for potensi in potensi_list %}
+                {# Atur animation-delay di sini menggunakan variabel yang sudah dihitung di view #}
+                <div class="umkm-card" style="animation-delay: {{ potensi.animation_delay }}s;">
+                    <div class="logo">
+                        {% if potensi.gambar_utama %} {# Menggunakan gambar_utama dari PotensiDesa #}
+                            <img src="{{ potensi.gambar_utama.url }}" alt="Gambar Produk {{ potensi.nama_potensi }}">
+                        {% else %}
+                            <img src="{% static 'images/placeholder-umkm-card.jpg' %}" alt="Logo Default">
                         {% endif %}
                     </div>
+                    <div class="info">
+                        <h3>{{ potensi.nama_potensi }}</h3> {# Menggunakan nama_potensi dari PotensiDesa #}
+                        <p class="jenis-usaha">Jenis Usaha: <strong>{{ potensi.jenis_usaha_umkm|default:"Tidak tersedia" }}</strong></p>
+                        {% if potensi.deskripsi_produk_umkm %} {# Menggunakan deskripsi_produk_umkm #}
+                            <p class="deskripsi">{{ potensi.deskripsi_produk_umkm|truncatechars:150 }}</p>
+                        {% endif %}
+                        <div class="details">
+                            <p><i class="fas fa-user"></i> Pengelola: {{ potensi.pengelola_kontak|default:"Tidak tersedia" }}</p> {# Menggunakan pengelola_kontak umum atau tambahkan bidang baru jika perlu #}
+                            {% if potensi.kontak_umkm_detail_list %}
+                                {% for kontak in potensi.kontak_umkm_detail_list %}
+                                    <p><i class="fas fa-phone"></i> Kontak: {{ kontak }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {% if potensi.alamat_umkm_detail %}
+                                <p><i class="fas fa-map-marker-alt"></i> Alamat: {{ potensi.alamat_umkm_detail }}</p>
+                            {% endif %}
+                            {% if potensi.link_detail %}
+                                <p><i class="fas fa-link"></i> <a href="{{ potensi.link_detail }}" target="_blank" rel="noopener noreferrer">Kunjungi Media Sosial/Website</a></p>
+                            {% endif %}
+                        </div>
+                        <div class="potensi-card-footer">
+                            <a href="{% url 'potensi_detail' pk=potensi.id %}" class="btn-detail">Lihat Detail</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p class="no-umkm">Belum ada data UMKM yang tersedia.</p>
-    {% endif %}
-</div>
-{% endblock %}
+            {% endfor %}
+        {% else %}
+            <p class="no-umkm">Belum ada data UMKM yang tersedia.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var heroSwiper = new Swiper(".hero-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            observer: true,
+            observeParents: true,
+            on: {
+                init: function() {
+                    this.update();
+                },
+                resize: function() {
+                    this.update();
+                }
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}

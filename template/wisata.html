@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
+{# Hapus baris ini karena filter 'times' tidak lagi diperlukan jika perhitungan di view: {% load my_custom_filters %} #}
 
 {% block title %}{{ title_text }}{% endblock %}
 
 {% block extra_head %}
+<!-- Link CSS SwiperJS untuk carousel gambar -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <style>
     /* Styling for Potensi Desa cards (similar to potensi_desa.html) */
     .potensi-grid {
@@ -21,6 +24,10 @@
         transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         animation: slideInUp 0.6s ease-out forwards;
         opacity: 0;
+        display: flex; /* Tambahkan ini untuk flexbox */
+        flex-direction: column; /* Konten diatur vertikal */
+        justify-content: space-between; /* Mendorong tombol ke bawah */
+        height: 100%; /* Memastikan semua kartu memiliki tinggi yang sama di grid */
     }
 
     .potensi-card img {
@@ -32,37 +39,41 @@
 
     .potensi-card-content {
         padding: 15px;
+        flex-grow: 1; /* Konten mengisi ruang yang tersedia */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Menyenterkan nama wisata secara vertikal */
+        align-items: center; /* Menyenterkan konten secara horizontal */
+        text-align: center; /* Menyenterkan teks */
     }
 
     .potensi-card h3 {
         margin-top: 0;
         color: #333;
         font-size: 1.4em;
+        margin-bottom: 10px; /* Jarak bawah dari judul */
+        min-height: 2.4em; /* Untuk konsistensi tinggi judul (jika ada 2 baris) */
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Maksimal 2 baris untuk judul */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center; /* Menyenterkan nama wisata */
     }
 
     .potensi-card p {
-        color: #666;
-        font-size: 0.95em;
-        line-height: 1.5;
+        display: none; /* Sembunyikan deskripsi singkat */
     }
 
     .potensi-card-meta {
-        font-size: 0.8em;
-        color: #999;
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .potensi-card-meta span {
-        margin-right: 10px;
+        display: none; /* Sembunyikan meta informasi */
     }
 
     /* Animation delay for each card */
     {% for potensi in potensi_list %}
     .potensi-card:nth-child({{ forloop.counter }}) {
-        animation-delay: {{ potensi.animation_delay }}s; {# FIXED HERE #}
+        animation-delay: {{ potensi.animation_delay }}s; {# Menggunakan atribut yang dihitung dari views.py #}
     }
     {% endfor %}
 
@@ -75,11 +86,142 @@
         transform: translateY(-8px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+
+    /* Gaya untuk Hero Section dengan Carousel */
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 500px; /* Tinggi hero section, sesuaikan jika perlu */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content-wrapper {
+        position: relative;
+        z-index: 2; /* Pastikan teks di atas overlay dan carousel */
+        padding: 20px;
+        max-width: 800px;
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Overlay gelap untuk teks agar lebih terbaca */
+        z-index: 1;
+    }
+
+    /* Gaya untuk Swiper di dalam Hero Section */
+    .hero-swiper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* Pastikan di bawah overlay */
+    }
+
+    .hero-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hero-swiper .swiper-button-next,
+    .hero-swiper .swiper-button-prev {
+        color: white !important; /* Panah putih di atas gambar latar */
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        z-index: 3; /* Pastikan panah di atas overlay */
+    }
+
+    .hero-swiper .swiper-button-next::after,
+    .hero-swiper .swiper-button-prev::after {
+        font-size: 40px !important; /* Ukuran panah lebih besar di hero */
+    }
+
+    .hero-swiper .swiper-pagination-bullet-active {
+        background-color: white !important; /* Titik paginasi putih */
+    }
+
+    /* Responsif untuk Hero Carousel */
+    @media (max-width: 768px) {
+        .hero-section {
+            height: 400px; /* Tinggi hero di tablet */
+        }
+        .hero-text h1 {
+            font-size: 2.5rem;
+        }
+        .hero-text p {
+            font-size: 1rem;
+        }
+        .hero-swiper .swiper-button-next::after,
+        .hero-swiper .swiper-button-prev::after {
+            font-size: 30px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-section {
+            height: 300px; /* Tinggi hero di ponsel */
+        }
+        .hero-text h1 {
+            font-size: 2rem;
+        }
+        .hero-text p {
+            font-size: 0.9rem;
+        }
+        .hero-swiper .swiper-button-next,
+        .hero-swiper .swiper-button-prev {
+            display: none !important; /* Sembunyikan panah di ponsel */
+        }
+    }
+    /* Gaya untuk tombol Lihat Detail */
+    .btn-secondary {
+        display: inline-block;
+        background-color: #5cb85c; /* Warna hijau */
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+        margin-top: 15px; /* Jarak dari judul */
+        align-self: center; /* Menyenterkan tombol di flex container */
+    }
+
+    .btn-secondary:hover {
+        background-color: #4cae4c;
+    }
 </style>
-{% endblock %}
+{% endblock extra_head %}
 
 {% block hero %}
-<section class="hero-section hero-small">
+<section class="hero-section">
     <div class="hero-content-wrapper">
         <div class="hero-text">
             <h1>{{ title_text }}</h1>
@@ -87,7 +229,30 @@
         </div>
     </div>
     <div class="hero-overlay"></div>
-    <img src="{% static 'images/wisata-hero-bg.jpg' %}" alt="Wisata Desa Boyemare" class="hero-background">
+
+    {# Carousel Gambar Wisata di sini #}
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            {% for image in carousel_images %}
+            <div class="swiper-slide">
+                {% if image.image %}
+                    <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Gambar Wisata' }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder-wisata.jpg' %}" alt="Gambar Placeholder">
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="swiper-slide">
+                <img src="{% static 'images/placeholder-wisata.jpg'}" alt="Gambar Placeholder">
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
 </section>
 {% endblock hero %}
 
@@ -95,7 +260,7 @@
 <section class="page-content">
     <div class="container">
         <h2 class="section-title">Destinasi Wisata Unggulan</h2>
-        <p class="section-description">Temukan keindahan alam dan daya tarik wisata yang memukau di Desa Boyemare.</p>
+        <p class="section-description">Temukan keindahan alam dan daya tarik wisata yang memukau di Desa Buwun Mas.</p>
 
         <div class="potensi-grid">
             {% for potensi in potensi_list %}
@@ -107,14 +272,13 @@
                 {% endif %}
                 <div class="potensi-card-content">
                     <h3>{{ potensi.nama_potensi }}</h3>
-                    <p>{{ potensi.deskripsi|truncatechars:150 }}</p>
-                    <div class="potensi-card-meta">
-                        <span><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi }}</span>
-                        <span><i class="fas fa-calendar-alt"></i> {{ potensi.tanggal_publikasi|date:"d M Y" }}</span>
-                    </div>
-                    {% if potensi.link_detail %}
-                        <a href="{{ potensi.link_detail }}" class="btn-secondary">Lihat Detail</a>
-                    {% endif %}
+                    {# Deskripsi singkat, lokasi, dan tanggal publikasi disembunyikan #}
+                    {# <p>{{ potensi.deskripsi|truncatechars:150 }}</p> #}
+                    {# <div class="potensi-card-meta"> #}
+                    {#     <span><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi }}</span> #}
+                    {#     <span><i class="fas fa-calendar-alt"></i> {{ potensi.tanggal_publikasi|date:"d M Y" }}</span> #}
+                    {# </div> #}
+                    <a href="{% url 'potensi_detail' pk=potensi.id %}" class="btn-secondary">Lihat Detail</a>
                 </div>
             </div>
             {% empty %}
@@ -123,4 +287,42 @@
         </div>
     </div>
 </section>
-{% endblock %}
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Link JavaScript SwiperJS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi SwiperJS untuk carousel di bagian hero
+        var heroSwiper = new Swiper(".hero-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            observer: true,
+            observeParents: true,
+            on: {
+                init: function() {
+                    this.update();
+                },
+                resize: function() {
+                    this.update();
+                }
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}

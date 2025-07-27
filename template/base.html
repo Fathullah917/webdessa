@@ -6,20 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Desa Boyemare{% endblock title %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    {# Favicon #}
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
-
-    {# Google Fonts #}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
-    {# Font Awesome Icons #}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    {# Swiper.js CSS #}
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
-    {# Custom CSS Anda #}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
     {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -29,8 +20,8 @@
             <a href="{% url 'home' %}" class="logo-container">
                 <img src="{% static 'img/logo.png' %}" alt="Logo Desa Boyemare" class="header-logo">
                 <div class="site-title-text">
-                    <h1 class="site-logo">DESA BOYEMARE</h1>
-                    <span>Kec. Sakra Barat</span>
+                    <h1 class="site-logo">DESA BUWUN MAS</h1>
+                    <span>Kec. Sekotong</span>
                 </div>
             </a>
         </div>
@@ -43,14 +34,24 @@
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle"><i class="fas fa-map-marked-alt"></i> Potensi Desa <i class="fas fa-caret-down"></i></a>
                 <div class="dropdown-content">
+                    <a href="{% url 'sda_list' %}"><i class="fas fa-seedling"></i> SDA</a>
                     <a href="{% url 'wisata' %}"><i class="fas fa-mountain"></i> Wisata</a>
-                    <a href="{% url 'budaya' %}"><i class="fas fa-mask"></i> Budaya</a>
-                    <a href="{% url 'pertanian' %}"><i class="fas fa-seedling"></i> Pertanian</a>
-                    <a href="{% url 'potensi_umkm' %}"><i class="fas fa-store"></i> UMKM</a>
+                    <a href="{% url 'budaya_list' %}"><i class="fas fa-mask"></i> Budaya</a>
+                    <a href="{% url 'umkm_list' %}"><i class="fas fa-store"></i> UMKM</a>
                 </div>
             </li>
             <a href="{% url 'data_apbdesa' %}" class="nav-item"><i class="fas fa-chart-bar"></i> Data APBDes</a>
-            <a href="{% url 'about' %}" class="nav-item"><i class="fas fa-info-circle"></i> Tentang</a>
+            
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle"><i class="fas fa-info-circle"></i> Profil Desa <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="{% url 'profil_visi_misi_sejarah' %}"><i class="fas fa-book"></i> Visi, Misi & Sejarah</a> 
+                    <a href="{% url 'profil_struktur' %}"><i class="fas fa-users-cog"></i> Struktur Pemerintahan</a> 
+                    <a href="{% url 'profil_kependudukan_wilayah' %}"><i class="fas fa-chart-line"></i> Data Kependudukan & Wilayah</a> 
+                    <a href="{% url 'profil_sarana_prasarana' %}"><i class="fas fa-building"></i> Sarana & Prasarana</a> 
+                </div>
+            </li>
+          
         </nav>
     </header>
 
@@ -60,10 +61,11 @@
             <div class="hero-content-wrapper">
                 <div class="welcome-box">
                     <h2>Selamat Datang di Website Resmi</h2>
-                    <h1>Desa Boyemare</h1>
+                    <h1>Desa Kitaaaaaa</h1>
+                    <h2>Kec.Sakra, Lombok Timur</h2>
                 </div>
                 <div class="person-box">
-                    <img src="{% static 'img/pp.jpg' %}" alt="Foto Kepala Desa">
+                    <img src="{% static 'img/ppp.png' %}" alt="Foto Kepala Desa">
                     <h3>Ahmad Fathullah,</h3>
                     <p>KEPALA DESA BOYEMARE</p>
                 </div>
@@ -71,7 +73,7 @@
         </section>
         {% endblock %}
 
-        <div class="content-wrapper container"> {# Pastikan ini ada dan berisi konten utama #}
+        <div class="content-wrapper container"> 
             {% if messages %}
                 <div class="messages-container">
                     {% for message in messages %}
@@ -125,47 +127,79 @@
     </div>
 
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="{% static 'js/script.js' %}"></script>
+    {# Jika script.js Anda kosong, Anda bisa menghapus baris di bawah ini #}
+    {# <script src="{% static 'js/script.js' %}"></script> #}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Dropdown menu functionality (for desktop hover and mobile click)
-            const dropdownNav = document.querySelector('nav .dropdown');
-            if (dropdownNav) {
+            // Menggunakan querySelectorAll untuk mendapatkan semua dropdown
+            const dropdownNavs = document.querySelectorAll('nav .dropdown');
+            
+            dropdownNavs.forEach(dropdownNav => { // Iterasi setiap elemen dropdown
+                // Memastikan elemen dropdown dan kontennya ada
                 const dropdownToggle = dropdownNav.querySelector('.dropdown-toggle');
                 const dropdownContent = dropdownNav.querySelector('.dropdown-content');
-                let timeout;
 
-                // Desktop hover
-                dropdownNav.addEventListener('mouseenter', () => {
-                    clearTimeout(timeout);
-                    dropdownContent.style.display = 'block';
-                    setTimeout(() => dropdownContent.style.opacity = '1', 10);
-                });
+                // Hanya lanjutkan jika dropdownToggle dan dropdownContent ditemukan
+                if (dropdownToggle && dropdownContent) {
+                    let timeout;
 
-                dropdownNav.addEventListener('mouseleave', () => {
-                    timeout = setTimeout(() => {
-                        dropdownContent.style.opacity = '0';
-                        setTimeout(() => dropdownContent.style.display = 'none', 300);
-                    }, 100);
-                });
+                    // Desktop hover (untuk perangkat yang mendukung hover)
+                    dropdownNav.addEventListener('mouseenter', () => {
+                        clearTimeout(timeout);
+                        dropdownContent.style.display = 'block';
+                        // Menggunakan setTimeout kecil untuk memungkinkan reflow DOM sebelum transisi opacity
+                        setTimeout(() => dropdownContent.style.opacity = '1', 10);
+                    });
 
-                // Mobile click toggle
-                dropdownToggle.addEventListener('click', (e) => {
-                    if (dropdownToggle.getAttribute('href') === '#') {
-                        e.preventDefault();
-                    }
-                    if (window.innerWidth <= 992) {
-                        if (dropdownContent.style.display === 'block') {
+                    dropdownNav.addEventListener('mouseleave', () => {
+                        timeout = setTimeout(() => {
                             dropdownContent.style.opacity = '0';
+                            // Menunggu transisi opacity selesai sebelum menyembunyikan display
                             setTimeout(() => dropdownContent.style.display = 'none', 300);
-                        } else {
-                            dropdownContent.style.display = 'block';
-                            setTimeout(() => dropdownContent.style.opacity = '1', 10);
+                        }, 100); // Penundaan kecil sebelum menyembunyikan
+                    });
+
+                    // Mobile click toggle (untuk layar kecil)
+                    dropdownToggle.addEventListener('click', (e) => {
+                        // Hanya mencegah default jika href adalah '#'
+                        if (dropdownToggle.getAttribute('href') === '#') {
+                            e.preventDefault();
                         }
-                    }
-                });
-            }
+                        
+                        // Cek jika ukuran layar adalah mobile (misal <= 992px)
+                        if (window.innerWidth <= 992) {
+                            // Tutup dropdown lain yang terbuka jika ada (kecuali dropdown yang sedang di-klik)
+                            dropdownNavs.forEach(otherDropdown => {
+                                if (otherDropdown !== dropdownNav) { 
+                                    const otherContent = otherDropdown.querySelector('.dropdown-content');
+                                    if (otherContent && otherContent.style.display === 'block') {
+                                        otherContent.style.opacity = '0';
+                                        setTimeout(() => otherContent.style.display = 'none', 300);
+                                    }
+                                }
+                            });
+
+                            // Toggle dropdown yang sedang di-klik
+                            if (dropdownContent.style.display === 'block') {
+                                dropdownContent.style.opacity = '0';
+                                setTimeout(() => dropdownContent.style.display = 'none', 300);
+                            } else {
+                                dropdownContent.style.display = 'block';
+                                setTimeout(() => dropdownContent.style.opacity = '1', 10);
+                            }
+                            // Menghentikan event bubbling agar tidak menutup dropdown lain jika diklik di dalamnya
+                            e.stopPropagation(); 
+                        }
+                    });
+
+                    // Menghentikan event bubbling pada konten dropdown agar tidak tertutup saat diklik di dalamnya
+                    dropdownContent.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+            });
 
             // Hamburger menu functionality
             const hamburgerIcon = document.getElementById('hamburger-icon');
@@ -203,6 +237,29 @@
                     }
                 });
             }
+        });
+
+        // Menutup menu navigasi dan dropdown ketika mengklik di luar
+        document.addEventListener('click', (event) => {
+            const mainNav = document.getElementById('main-nav');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const dropdownNavs = document.querySelectorAll('nav .dropdown');
+
+            // Tutup mobile nav jika terbuka dan klik di luar
+            if (mainNav && hamburgerIcon && mainNav.classList.contains('nav-open') && !mainNav.contains(event.target) && !hamburgerIcon.contains(event.target)) {
+                mainNav.classList.remove('nav-open');
+                hamburgerIcon.querySelector('i').classList.remove('fa-times');
+                hamburgerIcon.querySelector('i').classList.add('fa-bars');
+            }
+
+            // Tutup semua dropdown jika klik di luar dropdown manapun
+            dropdownNavs.forEach(dropdownNav => {
+                const dropdownContent = dropdownNav.querySelector('.dropdown-content');
+                if (dropdownContent && dropdownContent.style.display === 'block' && !dropdownNav.contains(event.target)) {
+                    dropdownContent.style.opacity = '0';
+                    setTimeout(() => dropdownContent.style.display = 'none', 300);
+                }
+            });
         });
     </script>
     {% block extra_js %}{% endblock %}

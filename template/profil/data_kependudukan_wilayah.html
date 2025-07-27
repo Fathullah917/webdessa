@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ judul_halaman }}{% endblock title %}
+
+{% block hero %}{% endblock %} {# Hapus hero section #}
+
+{% block content %}
+<section class="profil-detail-section">
+    <h1 class="page-title">{{ judul_halaman }}</h1>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if data_kependudukan %}
+    <div class="profil-card">
+        <h2>Data Kependudukan</h2>
+        <ul>
+            <li><strong>Total Penduduk:</strong> {{ data_kependudukan.total_penduduk }} jiwa</li>
+            <li><strong>Laki-laki:</strong> {{ data_kependudukan.jumlah_laki_laki }} jiwa</li>
+            <li><strong>Perempuan:</strong> {{ data_kependudukan.jumlah_perempuan }} jiwa</li>
+            <li><strong>Total Kepala Keluarga:</strong> {{ data_kependudukan.jumlah_kk }} KK</li>
+            <li><strong>Mayoritas Pekerjaan:</strong> {{ data_kependudukan.mayoritas_pekerjaan }}</li>
+            <li><strong>Tingkat Pendidikan Umum:</strong> {{ data_kependudukan.tingkat_pendidikan_umum }}</li>
+            <li><strong>Keberagaman:</strong> {{ data_kependudukan.keberagaman_budaya }}</li>
+        </ul>
+    </div>
+    {% else %}
+    <p class="no-data-message">Data Kependudukan belum tersedia. Harap lengkapi melalui halaman admin.</p>
+    {% endif %}
+
+    {% if data_kependudukan or sarana_prasarana %}
+    <div class="profil-card">
+        <h2>Data Wilayah</h2>
+        <ul>
+            {% if data_kependudukan and data_kependudukan.luas_wilayah %}
+                <li><strong>Luas Wilayah:</strong> {{ data_kependudukan.luas_wilayah }}</li>
+            {% else %}
+                <li><strong>Luas Wilayah:</strong> Belum tersedia.</li>
+            {% endif %}
+
+            {% if data_kependudukan and data_kependudukan.batas_wilayah %}
+                <li><strong>Batas Wilayah:</strong> {{ data_kependudukan.batas_wilayah }}</li>
+            {% else %}
+                <li><strong>Batas Wilayah:</strong> Belum tersedia.</li>
+            {% endif %}
+
+            {% if data_kependudukan and data_kependudukan.jumlah_dusun %}
+                <li><strong>Jumlah Dusun:</strong> {{ data_kependudukan.jumlah_dusun }}</li>
+            {% else %}
+                <li><strong>Jumlah Dusun:</strong> Belum tersedia.</li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% if sarana_prasarana and sarana_prasarana.peta_embed_code %}
+    <div class="profil-card map-section">
+        <h2>Peta Lokasi Desa</h2>
+        {{ sarana_prasarana.peta_embed_code|safe }}
+        <p class="map-note"><a href="https://maps.app.goo.gl/YourDesaLocation" target="_blank">Lihat Peta Lebih Besar</a></p>
+    </div>
+    {% endif %}
+    {% else %}
+    <p class="no-data-message">Data Wilayah belum tersedia. Harap lengkapi melalui halaman admin.</p>
+    {% endif %}
+
+</section>
+{% endblock content %}

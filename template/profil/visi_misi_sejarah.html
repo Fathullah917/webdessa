@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ judul_halaman }}{% endblock title %}
+
+{% block hero %}{% endblock %} {# Hapus hero section #}
+
+{% block content %}
+<section class="profil-detail-section">
+    <h1 class="page-title">{{ judul_halaman }}</h1>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if identitas_umum %}
+    <div class="profil-card">
+        <h2>Sejarah Desa</h2>
+        <p>{{ identitas_umum.sejarah_desa|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Visi Desa</h2>
+        <p>{{ identitas_umum.visi_desa|linebreaksbr }}</p>
+    </div>
+
+    <div class="profil-card">
+        <h2>Misi Desa</h2>
+        <ul class="misi-list">
+            {# FIX: Changed |trim to |strip OR removed it if |striptags is sufficient #}
+            {% for misi in identitas_umum.misi_desa|linebreaksbr %}
+                {# OPTION 1 (Recommended): striptags usually makes it "trim" enough for checks #}
+                {% if misi|striptags %}
+                    <li>{{ misi|safe }}</li>
+                {% endif %}
+                
+                {# OPTION 2 (If you specifically need to strip whitespace after stripping tags): #}
+                {# {% if misi|striptags|strip %} #}
+                {#     <li>{{ misi|safe }}</li> #}
+                {# {% endif %} #}
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <p class="no-data-message">Data Identitas Umum Desa, Visi, Misi, atau Sejarah belum tersedia. Mohon lengkapi melalui halaman admin.</p>
+    {% endif %}
+
+</section>
+{% endblock content %}

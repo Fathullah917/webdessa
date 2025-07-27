@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ judul_halaman }}{% endblock title %}
+
+{% block hero %}{% endblock %} {# Hapus hero section #}
+
+{% block content %}
+<section class="profil-detail-section">
+    <h1 class="page-title">{{ judul_halaman }}</h1>
+
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if pemerintahan_desa %}
+    <div class="profil-card">
+        <h2>Gambaran Umum Pemerintahan Desa</h2>
+        <p>{{ pemerintahan_desa.deskripsi_umum|linebreaksbr }}</p>
+        
+        <h3>Lembaga Pendukung Desa:</h3>
+        <p>{{ pemerintahan_desa.lembaga_pendukung|linebreaksbr }}</p>
+
+        <h3>Proses Perencanaan Pembangunan:</h3>
+        <p>{{ pemerintahan_desa.proses_perencanaan|linebreaksbr }}</p>
+    </div>
+    {% else %}
+    <p class="no-data-message">Data umum Pemerintahan Desa belum tersedia. Harap lengkapi melalui halaman admin.</p>
+    {% endif %}
+
+    <div class="profil-card">
+        <h2>Daftar Pejabat Desa</h2>
+        {% if pejabat_desa %}
+        <div class="pejabat-grid">
+            {% for pejabat in pejabat_desa %}
+            <div class="pejabat-card">
+                {% if pejabat.foto %}
+                    <img src="{{ pejabat.foto.url }}" alt="Foto {{ pejabat.nama_lengkap }}">
+                {% else %}
+                    <img src="{% static 'img/default_avatar.png' %}" alt="Foto Default"> {# Sediakan gambar default #}
+                {% endif %}
+                <h3>{{ pejabat.nama_lengkap }}</h3>
+                {#  START FIX: Menggunakan filter 'default' untuk jabatan #}
+                <p class="jabatan">{{ pejabat.jabatan.nama_jabatan|default:'Jabatan Belum Ditentukan' }}</p>
+                {#  END FIX #}
+                {% if pejabat.periode_jabatan %}
+                    <p class="periode">{{ pejabat.periode_jabatan }}</p>
+                {% endif %}
+                {% if pejabat.kontak_info %}
+                    <p class="kontak">{{ pejabat.kontak_info }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-data-message">Daftar pejabat desa belum diisi. Harap tambahkan pejabat melalui halaman admin.</p>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock content %}

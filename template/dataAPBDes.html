@@ -85,8 +85,13 @@
 
 <div class="apbdes-container">
     <h2>Data Anggaran Pendapatan dan Belanja Desa (APBDesa)</h2>
-    {% if apbdesa_list %}
-        {% for apbdes in apbdesa_list %}
+    {% comment %} 
+        Perubahan penting di sini: 
+        Mengubah 'apbdesa_list' menjadi 'apbdesa_data' 
+        agar sesuai dengan nama variabel yang dikirim dari views.py
+    {% endcomment %}
+    {% if apbdesa_data %} {# <--- UBAH DI SINI: apbdesa_list menjadi apbdesa_data #}
+        {% for apbdes in apbdesa_data %} {# <--- UBAH DI SINI: apbdesa_list menjadi apbdesa_data #}
             <div class="apbdes-card">
                 <h3>Tahun Anggaran {{ apbdes.tahun }}</h3>
                 <div class="apbdes-details">

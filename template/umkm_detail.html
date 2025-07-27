@@ -1,0 +1,450 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ potensi.nama_potensi }} - Detail UMKM{% endblock %}
+
+{% block extra_head %}
+<!-- Link CSS SwiperJS untuk hero carousel -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<style>
+    /* Gaya Umum untuk Konten Detail (Sama seperti wisata_detail.html) */
+    .detail-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        border-radius: 10px;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .detail-header h1 {
+        font-size: 2.8rem;
+        color: #388E3C;
+        margin-bottom: 10px;
+    }
+
+    .detail-header .jenis-potensi {
+        font-size: 1.2rem;
+        color: #5cb85c;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .detail-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .detail-section h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .detail-section h3 {
+        font-size: 1.4rem;
+        color: #555;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+
+    .detail-section p, .detail-section ul {
+        font-size: 1.05rem;
+        color: #555;
+        line-height: 1.7;
+    }
+
+    .detail-section ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .detail-section ul li {
+        margin-bottom: 8px;
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .detail-section ul li::before {
+        content: '\2022';
+        color: #5cb85c;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+        position: absolute;
+        left: 0;
+    }
+
+    /* Gaya untuk Video Embed */
+    .video-embed-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* Rasio aspek 16:9 */
+        height: 0;
+        overflow: hidden;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .video-embed-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    /* Gaya untuk Peta Embed */
+    .map-embed-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 40%; /* Rasio aspek untuk peta, sesuaikan jika perlu */
+        height: 0;
+        overflow: hidden;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .map-embed-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+    /* Gaya untuk Hero Section dengan Carousel */
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 500px; /* Tinggi hero section, sesuaikan jika perlu */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content-wrapper {
+        position: relative;
+        z-index: 2;
+        padding: 20px;
+        max-width: 800px;
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    .hero-detail-swiper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    .hero-detail-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-detail-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .hero-detail-swiper .swiper-button-next,
+    .hero-detail-swiper .swiper-button-prev {
+        color: white !important;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        z-index: 3;
+    }
+
+    .hero-detail-swiper .swiper-button-next::after,
+    .hero-detail-swiper .swiper-button-prev::after {
+        font-size: 40px !important;
+    }
+
+    .hero-detail-swiper .swiper-pagination-bullet-active {
+        background-color: white !important;
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+        .detail-container {
+            margin: 20px auto;
+            padding: 15px;
+        }
+        .detail-header h1 {
+            font-size: 2.2rem;
+        }
+        .hero-section {
+            height: 400px;
+        }
+        .hero-text h1 {
+            font-size: 2.5rem;
+        }
+        .hero-text p {
+            font-size: 1rem;
+        }
+        .hero-detail-swiper .swiper-button-next::after,
+        .hero-detail-swiper .swiper-button-prev::after {
+            font-size: 30px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .detail-container {
+            margin: 15px auto;
+            padding: 10px;
+        }
+        .detail-header h1 {
+            font-size: 1.8rem;
+        }
+        .hero-section {
+            height: 300px;
+        }
+        .hero-text h1 {
+            font-size: 2rem;
+        }
+        .hero-text p {
+            font-size: 0.9rem;
+        }
+        .hero-detail-swiper .swiper-button-next,
+        .hero-detail-swiper .swiper-button-prev {
+            display: none !important;
+        }
+    }
+
+    /* Gaya untuk tombol Kembali ke Daftar Potensi */
+    .back-button-container {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+
+    .back-button-container .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-button-container .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>
+{% endblock extra_head %}
+
+{% block hero %}
+<section class="hero-section">
+    <div class="hero-content-wrapper">
+        <div class="hero-text">
+            <h1>{{ potensi.nama_potensi }}</h1>
+            <p>{{ potensi.deskripsi|linebreaksbr }}</p>
+        </div>
+    </div>
+    <div class="hero-overlay"></div>
+
+    {# Carousel Gambar untuk Hero Section #}
+    <div class="swiper hero-detail-swiper">
+        <div class="swiper-wrapper">
+            {% if gallery_images %}
+                {% for img in gallery_images %}
+                <div class="swiper-slide">
+                    <img src="{{ img.image.url }}" alt="{{ img.caption|default:'Gambar Galeri Potensi' }}">
+                </div>
+                {% endfor %}
+            {% else %}
+                {# Fallback jika tidak ada gambar galeri, gunakan gambar utama potensi atau placeholder #}
+                <div class="swiper-slide">
+                    {% if potensi.gambar_utama %}
+                        <img src="{{ potensi.gambar_utama.url }}" alt="{{ potensi.nama_potensi }}">
+                    {% else %}
+                        <img src="{% static 'images/placeholder-umkm-detail.jpg' %}" alt="Gambar Placeholder">
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+{% endblock hero %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <h1>{{ potensi.nama_potensi }}</h1>
+        <p class="jenis-potensi">{{ potensi.jenis_potensi }}</p>
+    </div>
+
+    <div class="detail-section">
+        <h2>Detail Usaha Mikro, Kecil, dan Menengah (UMKM)</h2>
+        <p>{{ potensi.deskripsi|linebreaksbr }}</p> {# Deskripsi umum potensi UMKM #}
+
+        <h3>Nama Produk Unggulan</h3>
+        <p>{{ potensi.nama_produk_umkm|default:"Tidak tersedia" }}</p>
+
+        <h3>Jenis Usaha</h3>
+        <p>{{ potensi.jenis_usaha_umkm|default:"Tidak tersedia" }}</p>
+
+        <h3>Deskripsi Produk / Jasa</h3>
+        <p>{{ potensi.deskripsi_produk_umkm|default:"Tidak tersedia"|linebreaksbr }}</p>
+
+        <h3>Bahan Baku</h3>
+        <p>{{ potensi.bahan_baku_umkm|default:"Tidak tersedia" }}</p>
+
+        <h3>Skala Produksi & Jumlah Pekerja</h3>
+        <p>{{ potensi.skala_produksi_umkm|default:"Tidak tersedia" }}</p>
+
+        {% if potensi.legalitas_umkm_list %}
+        <h3>Legalitas Usaha</h3>
+        <ul>
+            {% for item in potensi.legalitas_umkm_list %}
+                <li>{{ item|striptags|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h3>Pemasaran</h3>
+        <p>{{ potensi.pemasaran_umkm|default:"Tidak tersedia" }}</p>
+        
+        <h3>Alamat Lokasi Usaha</h3>
+        <p>{{ potensi.alamat_umkm_detail|default:"Tidak tersedia"|linebreaksbr }}</p>
+
+        {% if potensi.kontak_umkm_detail_list %}
+        <h3>Kontak UMKM</h3>
+        <ul>
+            {% for item in potensi.kontak_umkm_detail_list %}
+                <li>{{ item|striptags|safe }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if potensi.link_detail %}
+        <h3>Link Pendukung (Media Sosial / Website)</h3>
+        <p><a href="{{ potensi.link_detail }}" target="_blank" class="btn-secondary" style="background-color: #007bff; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9em; display: inline-block; margin-top: 10px;">Kunjungi</a></p>
+        {% endif %}
+    </div>
+
+    {# Bagian Video #}
+    {% if potensi.embed_video_link %}
+    <div class="detail-section">
+        <h2>Video</h2>
+        <div class="video-embed-container">
+            {# Pastikan link video adalah embed link dari YouTube/Vimeo #}
+            <iframe src="{{ potensi.embed_video_link }}" allowfullscreen></iframe>
+        </div>
+    </div>
+    {% endif %}
+
+    {# Bagian Peta Lokasi - Paling Bawah #}
+    <div class="detail-section">
+        <h2>Lokasi & Akses</h2>
+        <p><i class="fas fa-map-marker-alt"></i> {{ potensi.lokasi|default:"Informasi lokasi belum tersedia." }}</p>
+        {% if potensi.peta_embed_code %}
+        <div class="map-embed-container">
+            {# Menggunakan 'safe' agar HTML dari kode embed bisa dirender #}
+            {# PENTING: Pastikan kode embed yang Anda masukkan di admin TIDAK memiliki atribut width dan height. #}
+            {# Contoh: <iframe src="https://www.google.com/maps/embed?pb=..." style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> #}
+            <iframe srcdoc="{{ potensi.peta_embed_code }}" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        {% else %}
+        <p class="text-muted">Peta lokasi belum tersedia.</p>
+        {% endif %}
+    </div>
+
+    {# Container untuk tombol kembali agar bisa disenterkan #}
+    <div class="back-button-container">
+        <a href="{% url 'umkm_list' %}" class="btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali ke Daftar UMKM
+        </a>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<!-- Link JavaScript SwiperJS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inisialisasi SwiperJS untuk carousel di bagian hero (latar belakang)
+        if (document.querySelector(".hero-detail-swiper")) {
+            var heroDetailSwiper = new Swiper(".hero-detail-swiper", {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                loop: true,
+                autoplay: {
+                    delay: 3000, // Geser setiap 3 detik
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next",
+                    prevEl: ".swiper-button-prev",
+                },
+                observer: true,
+                observeParents: true,
+                on: {
+                    init: function() {
+                        this.update();
+                    },
+                    resize: function() {
+                        this.update();
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock extra_js %}

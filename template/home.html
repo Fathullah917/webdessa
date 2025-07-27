@@ -4,6 +4,7 @@
 {% block title %}Beranda - Desa Boyemare{% endblock %}
 
 {% block extra_css %}
+<!-- Link CSS SwiperJS dari CDN (PENTING untuk carousel berita) -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <style>
     /*
@@ -12,475 +13,477 @@
     ========================================
     */
     .content-section {
-        padding: 40px 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-        text-align: center;
+        padding: 40px 20px; /* Jarak internal di dalam setiap bagian konten. */
+        max-width: 1200px; /* Lebar maksimum bagian konten. */
+        margin: 0 auto; /* Menyenterkan bagian konten secara horizontal. */
+        text-align: center; /* Menyenterkan teks di dalam bagian konten. */
     }
 
     .section-title {
-        font-size: 2.5rem;
-        color: #388E3C; /* Warna hijau gelap untuk judul */
-        margin-bottom: 20px;
-        position: relative;
-        padding-bottom: 10px;
+        font-size: 2.5rem; /* Ukuran font judul bagian. */
+        color: #388E3C; /* Warna hijau gelap untuk judul. */
+        margin-bottom: 20px; /* Jarak bawah judul. */
+        position: relative; /* Untuk memposisikan garis bawah dekoratif. */
+        padding-bottom: 10px; /* Padding di bawah judul untuk garis. */
     }
 
     .section-title::after { /* Garis bawah dekoratif untuk judul bagian */
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: 0;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background-color: #5cb85c; /* Warna hijau primer */
-        border-radius: 2px;
+        content: ''; /* Membuat pseudo-element. */
+        position: absolute; /* Memposisikan garis secara absolut. */
+        left: 50%; /* Mulai dari tengah horizontal. */
+        bottom: 0; /* Posisikan di bagian bawah judul. */
+        transform: translateX(-50%); /* Menyenterkan garis secara horizontal. */
+        width: 80px; /* Lebar garis. */
+        height: 4px; /* Tinggi garis. */
+        background-color: #5cb85c; /* Warna hijau primer untuk garis. */
+        border-radius: 2px; /* Sudut melengkung pada garis. */
     }
 
     .section-description {
-        font-size: 1.1rem;
-        color: #666;
-        margin-bottom: 40px;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+        font-size: 1.1rem; /* Ukuran font deskripsi bagian. */
+        color: #666; /* Warna teks deskripsi. */
+        margin-bottom: 40px; /* Jarak bawah deskripsi. */
+        max-width: 800px; /* Lebar maksimum deskripsi. */
+        margin-left: auto; /* Menyenterkan deskripsi. */
+        margin-right: auto; /* Menyenterkan deskripsi. */
     }
 
     /*
     ========================================
     CSS Khusus untuk Bagian Artikel/Berita
+    (Diadaptasi agar mirip dengan Potensi Desa Card)
     ========================================
     */
     .articles-section-container {
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        margin-bottom: 40px;
-        padding: 30px;
-        position: relative; /* Penting untuk penempatan tombol navigasi Swiper jika di dalam container ini */
+        /* background-color, border-radius, box-shadow DIHAPUS, karena card akan punya background sendiri */
+        margin-bottom: 40px; /* Jarak bawah kontainer artikel. */
+        padding: 30px; /* Padding di sekitar carousel artikel. */
+        position: relative; /* Untuk penempatan tombol navigasi Swiper. */
     }
 
     /* FILTER SECTION STYLING (Untuk Artikel) - INI KUNCI UNTUK KIRI & KANAN */
     .filter-section {
-        display: flex;
-        /* Ini yang membuat elemen paling kiri menempel kiri, dan paling kanan menempel kanan */
-        justify-content: space-between;
-        align-items: center; /* Memastikan vertikal align */
-        margin-bottom: 30px;
-        gap: 15px; /* Jarak antar item jika flex-wrap diaktifkan dan ada lebih dari 2 item */
-        flex-wrap: wrap; /* Agar elemen bisa wrap di layar kecil */
+        display: flex; /* Mengubah kontainer menjadi flexbox. */
+        justify-content: space-between; /* Menyebarkan item (filter dan tombol) ke ujung kiri dan kanan. */
+        align-items: center; /* Menyenterkan item secara vertikal. */
+        margin-bottom: 30px; /* Jarak bawah filter. */
+        gap: 15px; /* Jarak antar item jika flex-wrap diaktifkan. */
+        flex-wrap: wrap; /* Memungkinkan item untuk pindah baris di layar kecil. */
     }
 
-    /* Group untuk filter dropdown */
     .filter-controls {
-        display: flex;
-        align-items: center;
-        gap: 15px; /* Jarak antara label dan select */
-        flex-wrap: wrap;
+        display: flex; /* Mengubah kontainer menjadi flexbox. */
+        align-items: center; /* Menyenterkan item secara vertikal. */
+        gap: 15px; /* Jarak antara label dan select. */
+        flex-wrap: wrap; /* Memungkinkan item untuk pindah baris. */
     }
 
     .filter-section label {
-        font-size: 1rem;
-        color: #555;
+        font-size: 1rem; /* Ukuran font label filter. */
+        color: #e60909; /* Warna teks label filter. */
     }
 
     .filter-section select { /* Gaya untuk dropdown filter */
-        padding: 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        color: #333;
-        background-color: #fff;
-        appearance: none; /* Menghilangkan gaya default browser */
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        /* Menambahkan ikon panah kustom */
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        padding-right: 30px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        cursor: pointer;
+        padding: 10px 15px; /* Padding di dalam dropdown. */
+        border: 1px solid #ddd; /* Border dropdown. */
+        border-radius: 8px; /* Sudut melengkung dropdown. */
+        font-size: 0.95rem; /* Ukuran font teks dropdown. */
+        color: #333; /* Warna teks dropdown. */
+        background-color: #fff; /* Warna latar belakang dropdown. */
+        appearance: none; /* Menghilangkan gaya default browser. */
+        -webkit-appearance: none; /* Menghilangkan gaya default browser untuk WebKit. */
+        -moz-appearance: none; /* Menghilangkan gaya default browser untuk Mozilla. */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666' width='18px' height='18px'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E"); /* Ikon panah kustom. */
+        background-repeat: no-repeat; /* Mencegah ikon diulang. */
+        background-position: right 10px center; /* Posisi ikon panah. */
+        padding-right: 30px; /* Padding kanan untuk ikon. */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Bayangan dropdown. */
+        cursor: pointer; /* Mengubah kursor menjadi pointer. */
     }
 
     .filter-section select:focus {
-        border-color: #5cb85c;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.2);
+        border-color: #5cb85c; /* Warna border saat fokus. */
+        outline: none; /* Menghilangkan outline default. */
+        box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.2); /* Bayangan saat fokus. */
     }
 
     /* CSS untuk tombol "Lihat Semua Berita" yang inline dengan filter */
     .btn-view-more-inline {
-        display: inline-block;
-        background-color: #007bff; /* Warna biru */
-        color: white;
-        padding: 10px 20px; /* Ukuran yang proporsional */
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-        white-space: nowrap; /* Mencegah tombol putus baris */
+        display: inline-block; /* Menjadikan tombol inline-block. */
+        background-color: #007bff; /* Warna biru untuk tombol. */
+        color: white; /* Warna teks tombol. */
+        padding: 10px 20px; /* Padding tombol. */
+        border-radius: 8px; /* Sudut melengkung tombol. */
+        text-decoration: none; /* Menghilangkan garis bawah link. */
+        font-size: 0.9rem; /* Ukuran font tombol. */
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Efek transisi hover. */
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2); /* Bayangan tombol. */
+        white-space: nowrap; /* Mencegah teks tombol putus baris. */
     }
 
     .btn-view-more-inline:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
+        background-color: #0056b3; /* Warna latar belakang saat hover. */
+        transform: translateY(-2px); /* Menggeser tombol sedikit ke atas saat hover. */
     }
 
     /*
-    ========================================
+    =======================================
     Gaya Swiper (PENTING untuk Carousel)
-    ========================================
+    =======================================
     */
     .swiper { /* Kontainer utama Swiper */
-        width: 100%;
-        padding-bottom: 50px; /* Ruang untuk pagination dots di bawah */
-        padding-top: 10px;
+        width: 100%; /* Lebar penuh. */
+        padding-bottom: 50px; /* Ruang untuk pagination dots di bawah. */
+        padding-top: 10px; /* Padding atas. */
     }
 
     .swiper-slide { /* Setiap item dalam carousel (kartu artikel) */
-        display: flex;
-        justify-content: center;
-        align-items: stretch; /* Membuat tinggi kartu seragam */
-        height: auto;
-        box-sizing: border-box;
+        display: flex; /* Mengubah slide menjadi flexbox. */
+        justify-content: center; /* Menyenterkan konten di dalam slide. */
+        align-items: stretch; /* Membuat tinggi kartu seragam di setiap slide. */
+        height: auto; /* Tinggi otomatis. */
+        box-sizing: border-box; /* Memastikan padding/border termasuk dalam perhitungan lebar/tinggi. */
     }
 
-    .article-summary-card { /* Gaya untuk setiap kartu ringkasan artikel */
-        background-color: #fff;
-        border-radius: 10px;
-        height: auto;
-        min-height: 400px; /* Tinggi minimal kartu agar konten dan footer pas */
-        overflow: hidden; /* Penting untuk efek border-radius */
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column; /* Mengatur konten secara vertikal */
-        justify-content: space-between; /* Mendorong footer ke bawah */
-        width: 100%;
+    /* Gaya untuk setiap kartu ringkasan artikel (Diadaptasi dari .potensi-card) */
+    .article-summary-card {
+        background-color: #fff; /* Warna latar belakang kartu. */
+        border-radius: 8px; /* Sudut melengkung kartu. */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bayangan kartu. */
+        overflow: hidden; /* Memastikan konten tidak meluber. */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Efek transisi hover. */
+        animation: slideInUp 0.6s ease-out forwards; /* Animasi slide-in-up. */
+        opacity: 0; /* Awalnya transparan untuk animasi. */
+        display: flex; /* Mengubah kartu menjadi flexbox. */
+        flex-direction: column; /* Mengatur konten secara vertikal. */
+        height: 100%; /* Memastikan kartu mengisi tinggi slide. */
+        width: 100%; /* Lebar penuh kartu. */
+        text-align: left; /* Teks di dalam kartu rata kiri. */
     }
 
     .article-summary-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-8px); /* Menggeser kartu sedikit ke atas saat di-hover. */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Memperbesar bayangan saat di-hover. */
     }
 
-    /* Gambar di dalam kartu: PENTING untuk tampilan rasio 16:9 */
+    /* Gambar di dalam kartu artikel (Diadaptasi dari .potensi-card img) */
     .summary-image {
-        width: 100%;
-        height: 0;
-        padding-top: 56.25%; /* Rasio 16:9 (9/16 = 0.5625) untuk menjaga aspek rasio */
-        position: relative;
-        overflow: hidden;
-        border-bottom: 1px solid #eee;
-        flex-shrink: 0; /* Mencegah gambar menyusut */
-        background-color: #f0f0f0; /* Latar belakang placeholder */
-        display: flex; /* Untuk memposisikan placeholder teks "Tidak Ada Gambar" */
-        justify-content: center;
-        align-items: center;
-        font-size: 1rem;
-        color: #888;
-        text-align: center;
+        /*width: 100%; /* Lebar penuh gambar. */
+        /*height: 200px; /* Tinggi tetap untuk gambar artikel. */
+        object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi. */
+        display: block; /* Menghilangkan spasi ekstra. */
+        flex-shrink: 0; /* Mencegah gambar menyusut. */
     }
 
     .summary-image img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Ini yang akan memotong dan mengisi gambar ke dalam kotak */
-        object-position: center;
-        display: block;
+        /*width: 100%; /* Lebar penuh gambar dalam kontainer. */
+        /*height: 100%; /* Tinggi penuh gambar dalam kontainer. */
+        /*object-fit: cover; /* Memastikan gambar mengisi area tanpa distorsi. */
+        display: block; /* Menghilangkan spasi ekstra. */
     }
 
     .no-image-placeholder {
-        font-weight: bold;
-        color: #aaa;
+        /* Tetap pertahankan gaya placeholder jika gambar tidak ada */
+        display: flex; /* Untuk memposisikan teks di tengah. */
+        justify-content: center; /* Menyenterkan teks horizontal. */
+        align-items: center; /* Menyenterkan teks vertikal. */
+        width: 100%; /* Lebar penuh. */
+        /*height: 200px; /* Tinggi placeholder sama dengan gambar. */
+        background-color: #040404; /* Warna latar belakang placeholder. */
+        font-weight: bold; /* Ketebalan font. */
+        color: #aaa; /* Warna teks placeholder. */
+        text-align: center; /* Menyenterkan teks. */
     }
 
-    .summary-title { /* Gaya untuk judul artikel */
-        font-size: 1.5rem;
-        color: #333;
-        margin: 15px 15px 5px 15px;
-        text-align: left;
-        flex-grow: 0;
-        display: -webkit-box; /* Untuk membatasi jumlah baris teks */
-        -webkit-line-clamp: 2; /* Maksimal 2 baris untuk judul */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-height: 2.5em; /* Tinggi minimal untuk konsistensi 2 baris */
+    /* Konten kartu artikel (Diadaptasi dari .potensi-card-content) */
+    .article-card-content {
+        padding: 15px; /* Padding di dalam area konten. */
+        flex-grow: 1; /* Biarkan konten mengisi sisa ruang. */
+        /*display: flex; /* Mengubah konten menjadi flexbox. */
+        flex-direction: column; /* Mengatur item secara vertikal. */
     }
 
-    .summary-content { /* Konten ringkasan artikel */
-        padding: 0 15px;
-        text-align: left;
-        flex-grow: 1; /* Agar mengambil ruang yang tersisa */
-        margin-bottom: 10px;
-        overflow: hidden;
+    .summary-title { /* Judul artikel (Diadaptasi dari .potensi-card h3) */
+        font-size: 1.4em; /* Ukuran font judul. */
+        color: #333; /* Warna teks judul. */
+        margin: 0 0 10px; /* Margin bawah judul. */
+        min-height: 2.4em; /* Tinggi minimal untuk konsistensi 2 baris. */
+        line-height: 1.2; /* Jarak antar baris. */
+        display: -webkit-box; /* Untuk membatasi jumlah baris teks. */
+        -webkit-line-clamp: 2; /* Maksimal 2 baris untuk judul. */
+        -webkit-box-orient: vertical; /* Orientasi vertikal untuk line-clamp. */
+        overflow: hidden; /* Memotong teks yang meluber. */
+        text-overflow: ellipsis; /* Menambahkan elipsis (...) jika teks terpotong. */
     }
 
-    .summary-content .excerpt { /* Potongan teks ringkasan */
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.6;
-        display: -webkit-box;
-        -webkit-line-clamp: 3; /* Tampilkan maksimal 3 baris */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-height: 4.8em; /* Tinggi minimal untuk konsistensi 3 baris */
+    .excerpt { /* Potongan teks ringkasan (Diadaptasi dari .potensi-card p) */
+        font-size: 0.95em; /* Ukuran font ringkasan. */
+        color: #666; /* Warna teks ringkasan. */
+        line-height: 1.5; /* Jarak antar baris. */
+        margin-bottom: 15px; /* Jarak bawah ringkasan. */
+        flex-grow: 1; /* Memastikan deskripsi mengambil ruang yang tersedia. */
+        display: -webkit-box; /* Untuk membatasi jumlah baris teks. */
+        -webkit-line-clamp: 2; /* Tampilkan maksimal 3 baris. */
+        -webkit-box-orient: vertical; /* Orientasi vertikal untuk line-clamp. */
+        overflow: hidden; /* Memotong teks yang meluber. */
+        text-overflow: ellipsis; /* Menambahkan elipsis (...) jika teks terpotong. */
     }
 
-    .summary-footer { /* Footer setiap kartu (tanggal & tombol) */
-        padding: 15px;
-        border-top: 1px solid #eee;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: auto; /* Mendorong footer ke bagian paling bawah kartu */
-        flex-shrink: 0; /* Mencegah footer menyusut */
-        background-color: #fefefe;
+    /* Meta informasi dan tombol (Diadaptasi dari .potensi-card-meta dan tombol) */
+    .article-card-meta {
+        font-size: 0.8em; /* Ukuran font meta. */
+        color: #999; /* Warna teks meta. */
+        margin-top: 10px; /* Jarak atas dari konten. */
+        display: flex; /* Mengubah kontainer menjadi flexbox. */
+        justify-content: space-between; /* Menyebarkan item (tanggal dan tombol) ke ujung. */
+        align-items: center; /* Menyenterkan item secara vertikal. */
+        padding: 0 15px 15px; /* Padding untuk meta dan tombol. */
+        border-top: 1px solid #eee; /* Garis pemisah di atas meta. */
+        background-color: #fefefe; /* Warna latar belakang meta. */
     }
 
-    .btn-read-more { /* Tombol "Baca Selengkapnya" */
-        display: inline-block;
-        background-color: #5cb85c;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-size: 0.8rem;
-        transition: background-color 0.3s ease;
+    .article-card-meta span {
+        margin-right: 10px; /* Jarak kanan ikon/teks. */
+        white-space: nowrap; /* Mencegah teks meta pecah baris. */
     }
 
-    .btn-read-more:hover {
-        background-color: #4cae4c;
+    .article-card-meta i {
+        margin-right: 5px; /* Jarak kanan ikon. */
     }
 
-    .article-date { /* Teks tanggal artikel */
-        font-size: 0.8rem;
-        color: #888;
-        margin: 0;
-        white-space: nowrap; /* Mencegah tanggal putus baris */
+    /* Tombol Detail (Diadaptasi dari .btn-secondary di wisata.html) */
+    .btn-detail {
+        background-color: #FFEB3B; /* Warna kuning untuk tombol detail. */
+        color: #333; /* Warna teks tombol detail. */
+        padding: 8px 15px; /* Padding tombol. */
+        border-radius: 5px; /* Sudut melengkung tombol. */
+        text-decoration: none; /* Menghilangkan garis bawah link. */
+        font-size: 0.9em; /* Ukuran font tombol. */
+        font-weight: 500; /* Ketebalan font. */
+        transition: background-color 0.3s ease; /* Efek transisi hover. */
+        display: inline-block; /* Menjadikan tombol inline-block. */
+        width: auto; /* Lebar otomatis. */
     }
 
-    .no-articles { /* Pesan jika tidak ada artikel */
-        font-style: italic;
-        color: #777;
-        margin-top: 20px;
-        font-size: 1.1rem;
-        text-align: center;
+    .btn-detail:hover {
+        background-color: #FDD835; /* Warna latar belakang saat hover. */
+    }
+
+    .no-articles {
+        text-align: center; /* Menyenterkan teks. */
+        color: #666; /* Warna teks. */
+        font-style: italic; /* Gaya teks miring. */
+        padding: 30px; /* Padding di sekitar pesan. */
+    }
+
+    /* Animasi untuk kartu (dari potensi.html) */
+    @keyframes slideInUp { /* Definisi animasi slide dari bawah ke atas. */
+        from { opacity: 0; transform: translateY(30px); } /* Mulai dari transparan dan sedikit di bawah. */
+        to { opacity: 1; transform: translateY(0); } /* Berakhir di posisi normal dan penuh opasitas. */
     }
 
     /*
-    ========================================
+    =======================================
     Gaya Navigasi & Paginasi Swiper
-    ========================================
+    =======================================
     */
     .swiper-button-next, /* Tombol navigasi "Berikutnya" */
     .swiper-button-prev { /* Tombol navigasi "Sebelumnya" */
-        color: #388E3C !important; /* Warna panah hijau tua */
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10; /* Memastikan tombol di atas slide */
-        width: var(--swiper-navigation-size, 44px); /* Menggunakan variabel Swiper untuk ukuran */
-        height: var(--swiper-navigation-size, 44px);
+        color: #388E3C !important; /* Warna panah hijau tua (penting untuk menimpa gaya Swiper default). */
+        top: 50%; /* Posisikan di tengah vertikal. */
+        transform: translateY(-50%); /* Menyenterkan secara vertikal. */
+        z-index: 10; /* Memastikan tombol di atas slide. */
+        width: var(--swiper-navigation-size, 44px); /* Menggunakan variabel Swiper untuk ukuran lebar. */
+        height: var(--swiper-navigation-size, 44px); /* Menggunakan variabel Swiper untuk ukuran tinggi. */
     }
     .swiper-button-next::after, /* Mengatur ukuran ikon panah */
     .swiper-button-prev::after {
-        font-size: 24px !important;
+        font-size: 24px !important; /* Ukuran font ikon panah. */
     }
 
     .swiper-button-prev {
-        left: 0px; /* Posisikan lebih ke tepi kiri */
+        left: 0px; /* Posisikan lebih ke tepi kiri. */
     }
 
     .swiper-button-next {
-        right: 0px; /* Posisikan lebih ke tepi kanan */
+        right: 0px; /* Posisikan lebih ke tepi kanan. */
     }
 
-    /* Media query untuk menyembunyikan/menyesuaikan panah di mobile */
-    @media (max-width: 480px) {
+    @media (max-width: 480px) { /* Media query untuk layar ponsel. */
         .swiper-button-next,
         .swiper-button-prev {
-            /* display: none !important; */ /* Uncomment ini jika Anda ingin menyembunyikan panah di mobile */
-            font-size: 18px !important; /* Kecilkan panah di mobile */
-            width: 30px;
-            height: 30px;
+            /* display: none !important; */ /* Uncomment ini jika Anda ingin menyembunyikan panah di mobile. */
+            font-size: 18px !important; /* Kecilkan panah di mobile. */
+            width: 30px; /* Lebar tombol di mobile. */
+            height: 30px; /* Tinggi tombol di mobile. */
         }
     }
 
     .swiper-pagination-bullet-active { /* Gaya titik paginasi yang aktif */
-        background-color: #388E3C !important; /* Warna titik paginasi hijau */
+        background-color: #388E3C !important; /* Warna titik paginasi hijau (penting untuk menimpa gaya Swiper default). */
     }
 
     /*
-    ========================================
+    =======================================
     Gaya Bagian "Program Unggulan" (Grid Biasa)
-    ========================================
+    =======================================
     */
     .other-section-container {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        margin-top: 40px;
+        background-color: #fff; /* Warna latar belakang kontainer program. */
+        border-radius: 8px; /* Sudut melengkung kontainer. */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Bayangan kontainer. */
+        margin-top: 40px; /* Jarak atas dari bagian sebelumnya. */
     }
 
     .program-cards-grid { /* Grid untuk kartu program */
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Kolom responsif */
-        gap: 30px;
-        margin-top: 40px;
+        display: grid; /* Mengubah kontainer menjadi grid layout. */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Kolom responsif, minimal 280px. */
+        gap: 30px; /* Jarak antar item (kartu) dalam grid. */
+        margin-top: 40px; /* Jarak atas dari judul bagian. */
     }
 
     .program-card { /* Gaya setiap kartu program */
-        background-color: #f0f8f0;
-        border-radius: 10px;
-        padding: 25px;
-        text-align: left;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 180px; /* Tinggi minimal kartu program */
+        background-color: #f0f8f0; /* Warna latar belakang kartu program. */
+        border-radius: 10px; /* Sudut melengkung kartu program. */
+        padding: 25px; /* Padding di dalam kartu. */
+        text-align: left; /* Teks di dalam kartu rata kiri. */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Bayangan kartu. */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efek transisi hover. */
+        display: flex; /* Mengubah kartu menjadi flexbox. */
+        flex-direction: column; /* Mengatur konten secara vertikal. */
+        justify-content: space-between; /* Mendorong tombol ke bawah. */
+        min-height: 180px; /* Tinggi minimal kartu program. */
     }
 
     .program-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        transform: translateY(-5px); /* Menggeser kartu sedikit ke atas saat di-hover. */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Memperbesar bayangan saat di-hover. */
     }
 
     .program-card h3 {
-        color: #388E3C;
-        font-size: 1.4rem;
-        margin-bottom: 10px;
+        color: #388E3C; /* Warna teks judul program. */
+        font-size: 1.4rem; /* Ukuran font judul program. */
+        margin-bottom: 10px; /* Jarak bawah judul. */
     }
 
     .program-card p {
-        color: #555;
-        font-size: 0.95rem;
-        line-height: 1.6;
-        margin-bottom: 15px;
+        color: #0c0b0b; /* Warna teks paragraf program. */
+        font-size: 0.95rem; /* Ukuran font paragraf. */
+        line-height: 1.6; /* Jarak antar baris. */
+        margin-bottom: 15px; /* Jarak bawah paragraf. */
     }
 
     .program-card .small-button {
-        display: inline-block;
-        background-color: #5cb85c;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-size: 0.85rem;
-        transition: background-color 0.3s ease;
-        align-self: flex-start;
+        display: inline-block; /* Menjadikan tombol inline-block. */
+        background-color: #5cb85c; /* Warna hijau untuk tombol. */
+        color: white; /* Warna teks tombol. */
+        padding: 6px 12px; /* Padding tombol. */
+        border-radius: 5px; /* Sudut melengkung tombol. */
+        text-decoration: none; /* Menghilangkan garis bawah link. */
+        font-size: 0.85rem; /* Ukuran font tombol. */
+        transition: background-color 0.3s ease; /* Efek transisi hover. */
+        align-self: flex-start; /* Menjajarkan tombol ke kiri bawah. */
     }
 
     .program-card .small-button:hover {
-        background-color: #4cae4c;
+        background-color: #4cae4c; /* Warna latar belakang saat hover. */
     }
 
     /*
-    ========================================
+    =======================================
     Penyesuaian Responsif (Media Queries)
-    ========================================
+    =======================================
     */
     @media (max-width: 768px) { /* Untuk ukuran tablet */
         .section-title {
-            font-size: 2rem;
+            font-size: 2rem; /* Ukuran judul lebih kecil di tablet. */
         }
         .section-description {
-            font-size: 1rem;
+            font-size: 1rem; /* Ukuran deskripsi lebih kecil di tablet. */
         }
         .content-section {
-            padding: 30px 15px;
+            padding: 30px 15px; /* Padding konten lebih kecil di tablet. */
         }
         /* Swiper di tablet */
         .swiper-slide {
-            width: calc((100% - 30px) / 2); /* 2 slide per tampilan */
+            width: calc((100% - 30px) / 2); /* Menampilkan 2 slide per tampilan. */
         }
         .article-summary-card {
-            min-height: 380px;
+            min-height: 380px; /* Tinggi minimal kartu artikel di tablet. */
         }
         .summary-image {
-            padding-top: 56.25%; /* Rasio 16:9 tetap */
+            height: 180px; /* Tinggi gambar artikel di tablet. */
         }
         .summary-title {
-            font-size: 1.3rem;
-            -webkit-line-clamp: 3;
+            font-size: 1.3rem; /* Ukuran judul artikel lebih kecil. */
+            -webkit-line-clamp: 3; /* Maksimal 3 baris untuk judul. */
         }
-        .summary-content .excerpt {
-            -webkit-line-clamp: 4;
+        .excerpt {
+            -webkit-line-clamp: 4; /* Maksimal 4 baris untuk ringkasan. */
         }
         .program-card {
-            padding: 20px;
+            padding: 20px; /* Padding kartu program lebih kecil. */
         }
-        /* Penyesuaian filter dan tombol untuk tablet */
         .filter-section {
-            flex-direction: column; /* Ubah ke kolom di layar kecil */
-            align-items: flex-start; /* Sejajarkan ke kiri */
-            gap: 20px; /* Beri jarak antar filter dan tombol */
+            flex-direction: column; /* Mengubah arah flex menjadi kolom. */
+            align-items: flex-start; /* Menjajarkan item ke kiri. */
+            gap: 20px; /* Jarak antar item. */
         }
         .filter-controls {
-            justify-content: flex-start; /* Sejajarkan kontrol filter ke kiri */
-            width: 100%; /* Ambil lebar penuh */
+            justify-content: flex-start; /* Menjajarkan kontrol filter ke kiri. */
+            width: 100%; /* Lebar penuh. */
         }
         .btn-view-more-inline {
-            width: 100%; /* Tombol ambil lebar penuh di mobile */
-            text-align: center;
-            padding: 12px 20px; /* Sedikit lebih besar untuk mobile */
-            font-size: 1rem;
+            width: 100%; /* Lebar penuh tombol. */
+            text-align: center; /* Menyenterkan teks tombol. */
+            padding: 12px 20px; /* Padding tombol. */
+            font-size: 1rem; /* Ukuran font tombol. */
         }
     }
 
     @media (max-width: 480px) { /* Untuk ukuran ponsel */
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.8rem; /* Ukuran judul lebih kecil di ponsel. */
         }
         /* Swiper di mobile */
         .swiper-slide {
-            width: 100%; /* 1 slide per tampilan untuk ponsel */
+            width: 100%; /* 1 slide per tampilan untuk ponsel. */
         }
         .article-summary-card {
-            min-height: 350px;
+            min-height: 350px; /* Tinggi minimal kartu artikel di ponsel. */
         }
         .summary-image {
-            padding-top: 56.25%; /* Rasio 16:9 tetap */
+            height: 150px; /* Tinggi gambar artikel di ponsel. */
         }
         .summary-title {
-            font-size: 1.2rem;
-            -webkit-line-clamp: 3;
+            font-size: 1.2rem; /* Ukuran judul artikel lebih kecil. */
+            -webkit-line-clamp: 3; /* Maksimal 3 baris untuk judul. */
         }
-        .summary-content .excerpt {
-            font-size: 0.9rem;
-            -webkit-line-clamp: 5;
+        .excerpt {
+            font-size: 0.9rem; /* Ukuran ringkasan lebih kecil. */
+            -webkit-line-clamp: 5; /* Maksimal 5 baris untuk ringkasan. */
         }
-        .btn-read-more {
-            padding: 5px 10px;
-            font-size: 0.75rem;
+        .btn-detail { /* Menggunakan btn-detail untuk artikel juga */
+            padding: 5px 10px; /* Padding tombol lebih kecil. */
+            font-size: 0.75rem; /* Ukuran font tombol lebih kecil. */
         }
-        .article-date {
-            font-size: 0.75rem;
+        .article-card-meta span { /* Mengganti article-date */
+            font-size: 0.75rem; /* Ukuran font tanggal lebih kecil. */
         }
-        /* Penyesuaian filter dan tombol untuk ponsel (sama dengan tablet untuk kesederhanaan) */
         .filter-section {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 20px;
+            flex-direction: column; /* Mengubah arah flex menjadi kolom. */
+            align-items: flex-start; /* Menjajarkan item ke kiri. */
+            gap: 20px; /* Jarak antar item. */
         }
         .filter-controls {
-            justify-content: flex-start;
-            width: 100%;
+            justify-content: flex-start; /* Menjajarkan kontrol filter ke kiri. */
+            width: 100%; /* Lebar penuh. */
         }
         .btn-view-more-inline {
-            width: 100%;
-            text-align: center;
-            padding: 12px 20px;
-            font-size: 1rem;
+            width: 100%; /* Lebar penuh tombol. */
+            text-align: center; /* Menyenterkan teks tombol. */
+            padding: 12px 20px; /* Padding tombol. */
+            font-size: 1rem; /* Ukuran font tombol. */
         }
     }
 </style>
@@ -489,10 +492,8 @@
 {% block content %}
     <div class="content-section articles-section-container">
         <h2 class="section-title">Berita & Informasi Terbaru Desa Boyemare</h2>
-
-        {# BAGIAN FILTER WAKTU DAN TOMBOL "LIHAT SEMUA" YANG BERSEBELAHAN #}
         <form method="get" action="{% url 'home' %}" class="filter-section">
-            <div class="filter-controls"> {# Wrapper untuk elemen filter waktu (akan berada di sisi KIRI) #}
+            <div class="filter-controls"> 
                 <label for="time_filter">Tampilkan:</label>
                 <select name="time_period" id="time_filter" onchange="this.form.submit()">
                     <option value="" {% if not selected_time_period %}selected{% endif %}>Semua Waktu</option>
@@ -502,53 +503,50 @@
                     <option value="this_year" {% if selected_time_period == 'this_year' %}selected{% endif %}>Tahun Ini</option>
                 </select>
             </div>
-            {# Tombol "Lihat Semua Berita" (akan berada di sisi KANAN) #}
             <a href="{% url 'article_list' %}" class="btn-view-more-inline">Lihat Semua Berita <i class="fas fa-arrow-right"></i></a>
         </form>
 
-        {% if articles %} {# Kondisi: Tampilkan carousel jika ada artikel #}
-            <div class="swiper mySwiper"> {# Kontainer utama SwiperJS, dengan class 'mySwiper' yang ditarget oleh JS #}
-                <div class="swiper-wrapper"> {# Wrapper untuk semua slide Swiper #}
-                    {% for article in articles %} {# Loop melalui setiap artikel yang dikirim dari views.py #}
-                        <div class="swiper-slide"> {# Setiap item artikel adalah sebuah slide #}
+        {% if articles %} 
+            <div class="swiper mySwiper"> 
+                <div class="swiper-wrapper"> 
+                    {% for article in articles %} 
+                        <div class="swiper-slide"> 
                             <div class="article-summary-card">
-                                {# Link yang membungkus gambar dan judul untuk dapat diklik #}
                                 <a href="{% url 'article_detail' pk=article.id %}" style="text-decoration: none; color: inherit; display: block;">
-                                    <div class="summary-image"> {# Kontainer gambar artikel #}
-                                        {% if article.gambar_utama %} {# Cek apakah ada gambar utama #}
-                                            <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}"> {# Tampilkan gambar #}
+                                    <div class="summary-image">
+                                        {% if article.gambar_utama %} 
+                                            <img src="{{ article.gambar_utama.url }}" alt="{{ article.title }}">
                                         {% else %}
-                                            <span class="no-image-placeholder">Tidak Ada Gambar</span> {# Tampilkan placeholder #}
+                                            <div class="no-image-placeholder">Tidak Ada Gambar</div>
                                         {% endif %}
                                     </div>
-                                    <h3 class="summary-title">{{ article.title }}</h3> {# Judul artikel #}
                                 </a>
 
-                                <div class="summary-content"> {# Konten ringkasan artikel #}
-                                    {# striptags: menghapus tag HTML dari konten; truncatechars: memotong teks #}
+                            
+                                <div class="article-card-content">
+                                    <h3 class="summary-title">{{ article.title }}</h3> 
                                     <p class="excerpt">{{ article.content|striptags|truncatechars:120 }}</p>
                                 </div>
-
-                                {# Footer kartu dengan tombol "Baca Selengkapnya" dan tanggal #}
-                                <div class="summary-footer">
-                                    <a href="{% url 'article_detail' pk=article.id %}" class="btn-read-more">Baca Selengkapnya</a>
-                                    <p class="article-date">{{ article.created_at|date:"d M Y" }}</p> {# Tanggal artikel #}
+                                <div class="article-card-meta">
+                                    <span><i class="fas fa-calendar-alt"></i> {{ article.created_at|date:"d M Y" }}</span>
+                                    <a href="{% url 'article_detail' pk=article.id %}" class="btn-detail">Baca Selengkapnya</a>
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
+                <!-- Elemen untuk pagination dots Swiper -->
                 <div class="swiper-pagination"></div>
 
+                <!-- Elemen untuk tombol navigasi "Berikutnya" dan "Sebelumnya" -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
-        {% else %} {# Jika tidak ada artikel #}
+        {% else %} 
             <p class="no-articles">Belum ada artikel atau berita terbaru yang tersedia.</p>
         {% endif %}
     </div>
 
-    {# Bagian Program Unggulan Desa #}
     <div class="content-section other-section-container">
         <h2 class="section-title">Program Unggulan Desa</h2>
         <div class="program-cards-grid">
@@ -572,7 +570,8 @@
     </div>
 {% endblock %}
 
-{% block extra_js %} {# Blok ini untuk JavaScript tambahan yang spesifik untuk halaman ini #}
+{% block extra_js %}
+<!-- Link JavaScript SwiperJS dari CDN -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
     // Event listener untuk memastikan DOM sudah dimuat sebelum menjalankan script
